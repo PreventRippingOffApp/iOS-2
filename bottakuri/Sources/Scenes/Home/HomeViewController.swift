@@ -28,6 +28,8 @@ class HomeViewController: UIViewController {
     }
     
     @IBAction func emergency(_ sender: Any) {
-        
+        let emergencyStoryBoard: UIStoryboard = UIStoryboard(name: "Emergency", bundle: nil)
+        let emergencyViewContorller: EmergencyViewController = emergencyStoryBoard.instantiateViewController(withIdentifier: "Emergency") as! EmergencyViewController
+        self.navigationController?.pushViewController(emergencyViewContorller, animated: true)
     }
 }
