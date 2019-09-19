@@ -22,7 +22,9 @@ class HomeViewController: UIViewController {
     }
     
     @IBAction func showMap(_ sender: Any) {
-        
+        let mapStoryBoard: UIStoryboard = UIStoryboard(name: "Map", bundle: nil)
+        let mapViewContorller: MapViewController = mapStoryBoard.instantiateViewController(withIdentifier: "Map") as! MapViewController
+        self.navigationController?.pushViewController(mapViewContorller, animated: true)
     }
     
     @IBAction func emergency(_ sender: Any) {
