@@ -16,6 +16,9 @@
 		07E6C2F223332DBE00B1DFD5 /* EmergencyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E6C2F123332DBE00B1DFD5 /* EmergencyViewController.swift */; };
 		07E6C2F523332DE500B1DFD5 /* Map.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 07E6C2F423332DE500B1DFD5 /* Map.storyboard */; };
 		07E6C2F823332DF900B1DFD5 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E6C2F723332DF900B1DFD5 /* MapViewController.swift */; };
+		07E6C2FF23333AA400B1DFD5 /* APIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07E6C2FC23333AA400B1DFD5 /* APIKit.framework */; };
+		07E6C30023333AA400B1DFD5 /* Mapbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07E6C2FD23333AA400B1DFD5 /* Mapbox.framework */; };
+		07E6C30123333AA400B1DFD5 /* SVProgressHUD.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07E6C2FE23333AA400B1DFD5 /* SVProgressHUD.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +33,9 @@
 		07E6C2F123332DBE00B1DFD5 /* EmergencyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmergencyViewController.swift; sourceTree = "<group>"; };
 		07E6C2F423332DE500B1DFD5 /* Map.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Map.storyboard; sourceTree = "<group>"; };
 		07E6C2F723332DF900B1DFD5 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		07E6C2FC23333AA400B1DFD5 /* APIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = APIKit.framework; path = Carthage/Build/iOS/APIKit.framework; sourceTree = "<group>"; };
+		07E6C2FD23333AA400B1DFD5 /* Mapbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Mapbox.framework; path = Carthage/Build/iOS/Mapbox.framework; sourceTree = "<group>"; };
+		07E6C2FE23333AA400B1DFD5 /* SVProgressHUD.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SVProgressHUD.framework; path = Carthage/Build/iOS/SVProgressHUD.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -37,6 +43,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				07E6C2FF23333AA400B1DFD5 /* APIKit.framework in Frameworks */,
+				07E6C30023333AA400B1DFD5 /* Mapbox.framework in Frameworks */,
+				07E6C30123333AA400B1DFD5 /* SVProgressHUD.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -48,6 +57,7 @@
 			children = (
 				07E6C2D22332775700B1DFD5 /* bottakuri */,
 				07E6C2D12332775700B1DFD5 /* Products */,
+				07E6C2FB23333AA400B1DFD5 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -62,6 +72,7 @@
 		07E6C2D22332775700B1DFD5 /* bottakuri */ = {
 			isa = PBXGroup;
 			children = (
+				07E6C2DF2332775800B1DFD5 /* Info.plist */,
 				07E6C2E523332A6200B1DFD5 /* Sources */,
 			);
 			path = bottakuri;
@@ -126,10 +137,19 @@
 		07E6C2FA23332E2600B1DFD5 /* App */ = {
 			isa = PBXGroup;
 			children = (
-				07E6C2DF2332775800B1DFD5 /* Info.plist */,
 				07E6C2D32332775700B1DFD5 /* AppDelegate.swift */,
 			);
 			path = App;
+			sourceTree = "<group>";
+		};
+		07E6C2FB23333AA400B1DFD5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				07E6C2FC23333AA400B1DFD5 /* APIKit.framework */,
+				07E6C2FD23333AA400B1DFD5 /* Mapbox.framework */,
+				07E6C2FE23333AA400B1DFD5 /* SVProgressHUD.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -142,6 +162,7 @@
 				07E6C2CC2332775700B1DFD5 /* Sources */,
 				07E6C2CD2332775700B1DFD5 /* Frameworks */,
 				07E6C2CE2332775700B1DFD5 /* Resources */,
+				07E6C30223333AB500B1DFD5 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -199,6 +220,29 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		07E6C30223333AB500B1DFD5 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/build/iOS/APIKit.framework",
+				"$(SRCROOT)/Carthage/build/iOS/Mapbox.framework",
+				"$(SRCROOT)/Carthage/build/iOS/SVProgressHUD.framework",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		07E6C2CC2332775700B1DFD5 /* Sources */ = {
@@ -348,6 +392,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = Z23YQJ49WW;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = bottakuri/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -366,6 +414,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = Z23YQJ49WW;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = bottakuri/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
