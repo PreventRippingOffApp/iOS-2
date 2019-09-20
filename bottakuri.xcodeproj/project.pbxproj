@@ -19,6 +19,7 @@
 		07E6C2FF23333AA400B1DFD5 /* APIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07E6C2FC23333AA400B1DFD5 /* APIKit.framework */; };
 		07E6C30023333AA400B1DFD5 /* Mapbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07E6C2FD23333AA400B1DFD5 /* Mapbox.framework */; };
 		07E6C30123333AA400B1DFD5 /* SVProgressHUD.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07E6C2FE23333AA400B1DFD5 /* SVProgressHUD.framework */; };
+		07E6C3062334615B00B1DFD5 /* phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 07E6C3052334615B00B1DFD5 /* phone.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 		07E6C2FC23333AA400B1DFD5 /* APIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = APIKit.framework; path = Carthage/Build/iOS/APIKit.framework; sourceTree = "<group>"; };
 		07E6C2FD23333AA400B1DFD5 /* Mapbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Mapbox.framework; path = Carthage/Build/iOS/Mapbox.framework; sourceTree = "<group>"; };
 		07E6C2FE23333AA400B1DFD5 /* SVProgressHUD.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SVProgressHUD.framework; path = Carthage/Build/iOS/SVProgressHUD.framework; sourceTree = "<group>"; };
+		07E6C3052334615B00B1DFD5 /* phone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = phone.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,6 +131,7 @@
 		07E6C2F923332E1A00B1DFD5 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				07E6C3052334615B00B1DFD5 /* phone.png */,
 				07E6C2DA2332775800B1DFD5 /* Assets.xcassets */,
 			);
 			path = Assets;
@@ -213,6 +216,7 @@
 			files = (
 				07E6C2DE2332775800B1DFD5 /* LaunchScreen.storyboard in Resources */,
 				07E6C2DB2332775800B1DFD5 /* Assets.xcassets in Resources */,
+				07E6C3062334615B00B1DFD5 /* phone.png in Resources */,
 				07E6C2F023332DAF00B1DFD5 /* Emergency.storyboard in Resources */,
 				07E6C2EB23332D4600B1DFD5 /* Home.storyboard in Resources */,
 				07E6C2F523332DE500B1DFD5 /* Map.storyboard in Resources */,

@@ -17,7 +17,36 @@
                     <view key="view" contentMode="scaleToFill" id="6Uc-MF-TzS">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CLi-WN-2SX">
+                                <rect key="frame" x="80" y="320" width="254" height="256"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="256" id="2L9-0u-X8b"/>
+                                    <constraint firstAttribute="width" constant="254" id="vIV-Z2-Zy6"/>
+                                </constraints>
+                                <state key="normal" title="Button" image="phone.png"/>
+                                <connections>
+                                    <action selector="emergencyCall:" destination="sIB-yI-wcc" eventType="touchUpInside" id="N4x-nt-1Ty"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="タップで通報する" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7jh-J9-ju4">
+                                <rect key="frame" x="6" y="648" width="402" height="60"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="50"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="CLi-WN-2SX" firstAttribute="leading" secondItem="ZKo-iP-Qbp" secondAttribute="leading" constant="80" id="3KO-oh-IZx"/>
+                            <constraint firstItem="7jh-J9-ju4" firstAttribute="top" secondItem="CLi-WN-2SX" secondAttribute="bottom" constant="72" id="B5w-Si-yh1"/>
+                            <constraint firstItem="CLi-WN-2SX" firstAttribute="top" secondItem="ZKo-iP-Qbp" secondAttribute="top" constant="232" id="Mq3-ga-TxF"/>
+                            <constraint firstItem="ZKo-iP-Qbp" firstAttribute="bottom" secondItem="CLi-WN-2SX" secondAttribute="bottom" constant="286" id="Pe4-fm-hTi"/>
+                            <constraint firstItem="ZKo-iP-Qbp" firstAttribute="trailing" secondItem="CLi-WN-2SX" secondAttribute="trailing" constant="80" id="SPr-fi-UKJ"/>
+                            <constraint firstItem="ZKo-iP-Qbp" firstAttribute="bottom" secondItem="7jh-J9-ju4" secondAttribute="bottom" constant="154" id="ekE-D5-OHK"/>
+                            <constraint firstItem="7jh-J9-ju4" firstAttribute="leading" secondItem="ZKo-iP-Qbp" secondAttribute="leading" constant="6" id="xIf-yr-n9l"/>
+                            <constraint firstItem="ZKo-iP-Qbp" firstAttribute="trailing" secondItem="7jh-J9-ju4" secondAttribute="trailing" constant="6" id="yHL-kz-GiO"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="ZKo-iP-Qbp"/>
                     </view>
                     <navigationItem key="navigationItem" id="fvy-1p-e2S"/>
@@ -45,4 +74,7 @@
             <point key="canvasLocation" x="92.753623188405811" y="131.91964285714286"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="phone.png" width="256" height="256"/>
+    </resources>
 </document>
