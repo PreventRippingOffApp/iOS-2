@@ -9,6 +9,8 @@
 import UIKit
 
 class HomeViewController: UIViewController {
+    
+    var isRecording: Bool = false
 
     @IBOutlet weak var recordButton: UIButton! {
         didSet {
@@ -31,5 +33,16 @@ class HomeViewController: UIViewController {
         let emergencyStoryBoard: UIStoryboard = UIStoryboard(name: "Emergency", bundle: nil)
         let emergencyViewContorller: EmergencyViewController = emergencyStoryBoard.instantiateViewController(withIdentifier: "Emergency") as! EmergencyViewController
         self.navigationController?.pushViewController(emergencyViewContorller, animated: true)
+    }
+    
+    @IBAction func record(_ sender: Any) {
+        if isRecording {
+            isRecording = false
+            self.recordButton.layer.cornerRadius = 100
+        } else {
+            isRecording = true
+            self.recordButton.layer.cornerRadius = 0
+        }
+        
     }
 }
