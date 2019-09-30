@@ -12,9 +12,21 @@ class HomeViewController: UIViewController {
     
     var isRecording: Bool = false
 
-    @IBOutlet weak var recordButton: UIButton! {
+    @IBOutlet weak var titleLabel: UILabel! {
         didSet {
-            recordButton.layer.cornerRadius = 100
+            titleLabel.adjustsFontSizeToFitWidth = true
+        }
+    }
+    @IBOutlet weak var recordButton: UIButton! 
+    
+    @IBOutlet weak var mapButton: UIButton! {
+        didSet {
+            mapButton.titleLabel?.adjustsFontSizeToFitWidth = true
+        }
+    }
+    @IBOutlet weak var emergencyButton: UIButton! {
+        didSet {
+            emergencyButton.titleLabel?.adjustsFontSizeToFitWidth = true
         }
     }
     
@@ -44,5 +56,13 @@ class HomeViewController: UIViewController {
             self.recordButton.layer.cornerRadius = 0
         }
         
+    }
+}
+
+class circleButton: UIButton {
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        let radius: CGFloat = self.bounds.size.width / 2.0
+        self.layer.cornerRadius = radius
     }
 }
