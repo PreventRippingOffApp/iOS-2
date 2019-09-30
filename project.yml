@@ -1,0 +1,44 @@
+name: bottakuri
+configs:
+  Debug: debug
+  Release: release
+options:
+  groupSortPosition: top
+attributes:
+  ORGANIZATIONNAME: ymgn
+fileGroups:
+  - bottakuri
+
+targets:
+  bottakuri:
+    type: application
+    platform: iOS
+    sources:
+      - path: bottakuri
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: ymgn.bottakuri
+        ASSETCATALOG_COMPIER_APPICON_NAME: AppIcon
+        INFOPLIST_FILE: bottakuri/Info.plist
+      configs:
+        Debug:
+          GCC_OPTIMIZATION_LEVEL: O
+        Release:
+          GCC_OPTIMIZATION_LEVEL: s
+    dependecies:
+      - carthage: SVProgressHUD
+      - carthage: APIKit
+
+schemes:
+  bottakuri:
+    build:
+      targets:
+        bottakuri: all
+    run:
+      config: Debug
+    profile:
+      config: Release
+    analyze:
+      config: Debug
+    archive:
+      config: Release
