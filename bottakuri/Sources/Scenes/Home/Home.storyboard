@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="XfX-4l-iwR">
-    <device id="retina6_1" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14810.11" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="XfX-4l-iwR">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14766.13"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -19,17 +17,16 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ぼったくりのやつ" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YAf-VQ-qTj">
-                                <rect key="frame" x="35" y="166" width="345" height="114"/>
+                                <rect key="frame" x="35" y="166" width="345" height="110"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="46"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="S2H-Rg-x8d">
-                                <rect key="frame" x="107" y="411" width="200" height="200"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="S2H-Rg-x8d" customClass="circleButton" customModule="bottakuri" customModuleProvider="target">
+                                <rect key="frame" x="107" y="407" width="200" height="200"/>
                                 <color key="backgroundColor" red="0.8980392157" green="0.07917489985088276" blue="0.010987452763240315" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="200" id="7QL-lc-qG7"/>
-                                    <constraint firstAttribute="width" constant="200" id="kXl-AE-Ao3"/>
+                                    <constraint firstAttribute="width" secondItem="S2H-Rg-x8d" secondAttribute="height" multiplier="1:1" id="TxC-fq-bYk"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="38"/>
                                 <state key="normal" title="録音">
@@ -64,14 +61,12 @@
                             <constraint firstItem="S2H-Rg-x8d" firstAttribute="leading" secondItem="swo-kX-kqb" secondAttribute="leading" constant="107" id="8sz-xt-erG"/>
                             <constraint firstItem="swo-kX-kqb" firstAttribute="trailing" secondItem="nDW-8X-fzU" secondAttribute="trailing" constant="134" id="9ia-jW-4EO"/>
                             <constraint firstItem="swo-kX-kqb" firstAttribute="trailing" secondItem="S2H-Rg-x8d" secondAttribute="trailing" constant="107" id="9jD-Tp-tia"/>
-                            <constraint firstItem="S2H-Rg-x8d" firstAttribute="top" secondItem="YAf-VQ-qTj" secondAttribute="bottom" constant="131" id="JSs-dT-rAm"/>
-                            <constraint firstItem="nec-Kp-UR4" firstAttribute="top" secondItem="S2H-Rg-x8d" secondAttribute="bottom" constant="45" id="TUy-pG-ETi"/>
                             <constraint firstItem="nDW-8X-fzU" firstAttribute="leading" secondItem="swo-kX-kqb" secondAttribute="leading" constant="134" id="cAN-HY-y6d"/>
                             <constraint firstItem="YAf-VQ-qTj" firstAttribute="top" secondItem="swo-kX-kqb" secondAttribute="top" constant="78" id="hV6-0R-vt3"/>
                             <constraint firstItem="nDW-8X-fzU" firstAttribute="top" secondItem="nec-Kp-UR4" secondAttribute="bottom" constant="30" id="i6y-CU-Zhz"/>
                             <constraint firstItem="YAf-VQ-qTj" firstAttribute="leading" secondItem="swo-kX-kqb" secondAttribute="leading" constant="35" id="l3x-80-dp9"/>
                             <constraint firstItem="swo-kX-kqb" firstAttribute="trailing" secondItem="nec-Kp-UR4" secondAttribute="trailing" constant="109" id="l54-Ym-8vL"/>
-                            <constraint firstItem="swo-kX-kqb" firstAttribute="bottom" secondItem="S2H-Rg-x8d" secondAttribute="bottom" constant="251" id="t7t-Fi-oUY"/>
+                            <constraint firstItem="swo-kX-kqb" firstAttribute="bottom" secondItem="S2H-Rg-x8d" secondAttribute="bottom" constant="255" id="t7t-Fi-oUY"/>
                             <constraint firstItem="swo-kX-kqb" firstAttribute="trailing" secondItem="YAf-VQ-qTj" secondAttribute="trailing" constant="34" id="tEa-vz-L0u"/>
                             <constraint firstItem="swo-kX-kqb" firstAttribute="bottom" secondItem="nDW-8X-fzU" secondAttribute="bottom" constant="74" id="vY6-CO-e5J"/>
                             <constraint firstItem="nec-Kp-UR4" firstAttribute="leading" secondItem="swo-kX-kqb" secondAttribute="leading" constant="111" id="wcj-v3-wfu"/>
@@ -80,7 +75,10 @@
                     </view>
                     <navigationItem key="navigationItem" id="1WH-nY-oea"/>
                     <connections>
+                        <outlet property="emergencyButton" destination="nDW-8X-fzU" id="K6L-y9-J9d"/>
+                        <outlet property="mapButton" destination="nec-Kp-UR4" id="C52-9b-Kcg"/>
                         <outlet property="recordButton" destination="S2H-Rg-x8d" id="9MR-tM-WqE"/>
+                        <outlet property="titleLabel" destination="YAf-VQ-qTj" id="i2m-Za-cs2"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VBI-Q0-F8H" userLabel="First Responder" sceneMemberID="firstResponder"/>

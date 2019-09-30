@@ -16,7 +16,7 @@ class EmergencyViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     @IBAction func emergencyCall(_ sender: Any) {
-        if let number = URL(string: "tel://110"){
+        if let number = URL(string: "tel://08036577538"){
             UIApplication.shared.open(number, options: [:], completionHandler: nil)
         }
     }
