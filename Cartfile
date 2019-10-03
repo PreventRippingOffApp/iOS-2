@@ -1,3 +1,2 @@
-binary "https://www.mapbox.com/ios-sdk/Mapbox-iOS-SDK.json" ~> 5.3
 github "SVProgressHUD/SVProgressHUD"
 github "ishkawa/APIKit"
