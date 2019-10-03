@@ -25,9 +25,10 @@ targets:
           GCC_OPTIMIZATION_LEVEL: O
         Release:
           GCC_OPTIMIZATION_LEVEL: s
-    dependecies:
+    dependencies:
       - carthage: SVProgressHUD
       - carthage: APIKit
+      - sdk: MapKit.framework
 
 schemes:
   bottakuri:

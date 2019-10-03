@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="bRh-RZ-ZVN">
-    <device id="retina6_1" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="bRh-RZ-ZVN">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -18,24 +15,23 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="O0k-xq-rC4" customClass="MGLMapView">
-                                <rect key="frame" x="0.0" y="44" width="414" height="852"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="string" keyPath="styleURL__" value="mapbox://styles/ymgn/ck0q7l4hs30av1cqvt96xbxq2"/>
-                                </userDefinedRuntimeAttributes>
-                            </view>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nMt-Zs-QVI">
+                                <rect key="frame" x="0.0" y="88" width="414" height="808"/>
+                            </mapView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="aEh-yZ-Mo3" firstAttribute="trailing" secondItem="O0k-xq-rC4" secondAttribute="trailing" id="5hl-dR-lN8"/>
-                            <constraint firstItem="O0k-xq-rC4" firstAttribute="leading" secondItem="aEh-yZ-Mo3" secondAttribute="leading" id="fUr-8V-6F4"/>
-                            <constraint firstItem="O0k-xq-rC4" firstAttribute="top" secondItem="aEh-yZ-Mo3" secondAttribute="top" constant="-44" id="gt0-Y9-OID"/>
-                            <constraint firstItem="aEh-yZ-Mo3" firstAttribute="bottom" secondItem="O0k-xq-rC4" secondAttribute="bottom" constant="-34" id="m3b-li-Fvk"/>
+                            <constraint firstItem="nMt-Zs-QVI" firstAttribute="leading" secondItem="aEh-yZ-Mo3" secondAttribute="leading" id="MPU-Kl-q90"/>
+                            <constraint firstItem="nMt-Zs-QVI" firstAttribute="top" secondItem="aEh-yZ-Mo3" secondAttribute="top" id="S1w-2V-eaQ"/>
+                            <constraint firstItem="aEh-yZ-Mo3" firstAttribute="trailing" secondItem="nMt-Zs-QVI" secondAttribute="trailing" id="XuL-FP-SvF"/>
+                            <constraint firstItem="aEh-yZ-Mo3" firstAttribute="bottom" secondItem="nMt-Zs-QVI" secondAttribute="bottom" constant="-34" id="cCR-BO-nJO"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="aEh-yZ-Mo3"/>
                     </view>
                     <navigationItem key="navigationItem" id="qih-h2-NVW"/>
+                    <connections>
+                        <outlet property="mapView" destination="nMt-Zs-QVI" id="f4p-eX-dEc"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2g0-va-LAD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
