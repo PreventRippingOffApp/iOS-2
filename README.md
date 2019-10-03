@@ -3,6 +3,7 @@
 ### Usage
 ``` bash
 $ carthage update --platform ios
+$ xcodegen
 ```
 
 ### 使用ライブラリ
