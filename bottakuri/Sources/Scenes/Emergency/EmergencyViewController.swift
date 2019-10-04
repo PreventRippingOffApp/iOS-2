@@ -37,12 +37,11 @@ class EmergencyViewController: UIViewController, CLLocationManagerDelegate {
             let location = Location(description: "", location: [Float(userLocation.latitude), Float(userLocation.longitude)], title: "")
             let request = PostLocation(location: location)
             Session.send(request) { result in
-                print(result)
                 switch result {
-                    case .success(let response):
-                        print(response)
-                    case .failure(let error):
-                        print(error)
+                case .success( _):
+                        break
+                case .failure( _):
+                        break
                 }
             }
         }
