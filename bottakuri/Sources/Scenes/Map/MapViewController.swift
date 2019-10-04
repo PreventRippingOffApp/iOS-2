@@ -62,7 +62,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
         Session.send(request) { result in
             switch result {
                 case .success(let response):
-                    response.locaitonData.forEach { location in
+                    response.locationData.forEach { location in
                         self.addPin(location: location)
                     }
                 default:

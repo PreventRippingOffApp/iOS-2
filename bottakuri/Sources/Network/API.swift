@@ -53,7 +53,7 @@ public struct GetLocations: locationRequest {
 public struct LocationGetResponse: Decodable {
     let errorStr: String?
     let isSave: Int
-    let locaitonData: [Location]
+    let locationData: [Location]
 }
 public struct PostLocation: locationRequest {
     public var dataParser: DataParser {
@@ -67,7 +67,9 @@ public struct PostLocation: locationRequest {
         return "/saveLocation"
     }
     public var bodyParameters: BodyParameters? {
-        return JSONBodyParameters(JSONObject: try! JSONEncoder().encode(location))
+        return JSONBodyParameters(JSONObject: [
+            "location": location.location
+        ])
     }
     
     public func response(from object: Any, urlResponse: HTTPURLResponse) throws -> LocationPostResponse {
