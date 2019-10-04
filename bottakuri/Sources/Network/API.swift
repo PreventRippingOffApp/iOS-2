@@ -53,7 +53,7 @@ public struct GetLocations: locationRequest {
 public struct LocationGetResponse: Decodable {
     let errorStr: String?
     let isSave: Int
-    let locaitonData: [Location]
+    let locationData: [Location]
 }
 public struct PostLocation: locationRequest {
     public var dataParser: DataParser {
