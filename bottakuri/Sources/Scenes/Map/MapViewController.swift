@@ -19,6 +19,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         startUpdatingLocation()
+        getLocations()
     }
     
     private func startUpdatingLocation() {
