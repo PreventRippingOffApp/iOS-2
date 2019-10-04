@@ -7,18 +7,49 @@
 //
 
 import UIKit
+import APIKit
+import SVProgressHUD
+import CoreLocation
 
-class EmergencyViewController: UIViewController {
+class EmergencyViewController: UIViewController, CLLocationManagerDelegate {
+    let locationManager = CLLocationManager()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
     }
+    
     @IBAction func emergencyCall(_ sender: Any) {
-        if let number = URL(string: "tel://08036577538"){
-            UIApplication.shared.open(number, options: [:], completionHandler: nil)
+        emergency()
+    }
+    
+    func emergency() {
+//        if let number = URL(string: "tel://110"){
+//            UIApplication.shared.open(number, options: [:], completionHandler: nil)
+//        }
+        switch CLLocationManager.authorizationStatus() {
+        case .notDetermined:
+            locationManager.requestAlwaysAuthorization()
+            locationManager.requestWhenInUseAuthorization()
+        default:
+            break
         }
+        if let userLocation = locationManager.location?.coordinate {
+            let location = Location(description: nil, location: [Float(userLocation.latitude), Float(userLocation.longitude)], title: nil)
+            let request = PostLocation(location: location)
+            Session.send(request) { result in
+                switch result {
+                    case .success(let response):
+                        print(response)
+                    case .failure(let error):
+                        print(error)
+                }
+            }
+        }
+        let alert = UIAlertController(title: nil, message: "通報しました", preferredStyle: .alert)
+        alert.addAction(UIAlertAction.init(title: "OK", style: .default, handler: { (_) in
+            self.dismiss(animated: true, completion: nil)
+        }))
+        present(alert, animated: true, completion: nil)
     }
     
 }
