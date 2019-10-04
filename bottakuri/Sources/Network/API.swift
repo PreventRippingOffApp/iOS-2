@@ -21,7 +21,7 @@ final class DecodableDataParser: DataParser {
 
 enum Result<T> {
     case success(T)
-    case faulure(Error)
+    case failure(Error)
 }
 
 protocol locationRequest: Request { }

@@ -9,6 +9,8 @@
 import UIKit
 import MapKit
 import CoreLocation
+import APIKit
+import SVProgressHUD
 
 class MapViewController: UIViewController, CLLocationManagerDelegate {
     @IBOutlet weak var mapView: MKMapView!
@@ -42,5 +44,23 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
             self.dismiss(animated: true, completion: nil)
         }))
         present(alert, animated: true, completion: nil)
+    }
+    
+    func addPin(locaiton: Location) {
+        
+    }
+    
+    func getLocations() {
+        let request = GetLocations()
+        Session.send(request) { result in
+            switch result {
+                case .success(let response):
+                    response.locaitonData.forEach { location in
+                        self.addPin(locaiton: location)
+                    }
+                default:
+                    break
+            }
+        }
     }
 }
