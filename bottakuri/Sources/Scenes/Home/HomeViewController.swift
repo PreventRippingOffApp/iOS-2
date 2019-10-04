@@ -17,7 +17,7 @@ class HomeViewController: UIViewController {
             titleLabel.adjustsFontSizeToFitWidth = true
         }
     }
-    @IBOutlet weak var recordButton: UIButton! 
+    @IBOutlet weak var recordButton: circleButton!
     
     @IBOutlet weak var mapButton: UIButton! {
         didSet {
@@ -50,12 +50,34 @@ class HomeViewController: UIViewController {
     @IBAction func record(_ sender: Any) {
         if isRecording {
             isRecording = false
-            self.recordButton.layer.cornerRadius = 100
+            toCircle()
         } else {
             isRecording = true
-            self.recordButton.layer.cornerRadius = 0
+            toSquare()
         }
         
+    }
+    
+    func toCircle() {
+        let animation = CABasicAnimation(keyPath: "cornerRadius")
+        animation.duration = 0.1
+        animation.fromValue = 0.0
+        animation.toValue = self.recordButton.bounds.size.width / 2.0
+        animation.autoreverses = false
+        animation.isRemovedOnCompletion = false
+        animation.fillMode = .forwards
+        self.recordButton.layer.add(animation, forKey: nil)
+    }
+    
+    func toSquare() {
+        let animation = CABasicAnimation(keyPath: "cornerRadius")
+        animation.duration = 0.1
+        animation.fromValue = 0.0
+        animation.toValue = 0.0
+        animation.autoreverses = false
+        animation.isRemovedOnCompletion = false
+        animation.fillMode = .forwards
+        self.recordButton.layer.add(animation, forKey: nil)
     }
 }
 
