@@ -46,8 +46,14 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
         present(alert, animated: true, completion: nil)
     }
     
-    func addPin(locaiton: Location) {
+    func addPin(location: Location) {
+        let pin: MKPointAnnotation = MKPointAnnotation()
+        pin.coordinate = CLLocationCoordinate2D(latitude: CLLocationDegrees(location.location[0]), longitude: CLLocationDegrees(location.location[1]))
         
+        pin.title = location.title
+        pin.subtitle = location.description
+        
+        mapView.addAnnotation(pin)
     }
     
     func getLocations() {
@@ -56,7 +62,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
             switch result {
                 case .success(let response):
                     response.locaitonData.forEach { location in
-                        self.addPin(locaiton: location)
+                        self.addPin(location: location)
                     }
                 default:
                     break
