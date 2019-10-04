@@ -67,7 +67,9 @@ public struct PostLocation: locationRequest {
         return "/saveLocation"
     }
     public var bodyParameters: BodyParameters? {
-        return JSONBodyParameters(JSONObject: try! JSONEncoder().encode(location))
+        return JSONBodyParameters(JSONObject: [
+            "location": location.location
+        ])
     }
     
     public func response(from object: Any, urlResponse: HTTPURLResponse) throws -> LocationPostResponse {

@@ -34,9 +34,10 @@ class EmergencyViewController: UIViewController, CLLocationManagerDelegate {
             break
         }
         if let userLocation = locationManager.location?.coordinate {
-            let location = Location(description: nil, location: [Float(userLocation.latitude), Float(userLocation.longitude)], title: nil)
+            let location = Location(description: "", location: [Float(userLocation.latitude), Float(userLocation.longitude)], title: "")
             let request = PostLocation(location: location)
             Session.send(request) { result in
+                print(result)
                 switch result {
                     case .success(let response):
                         print(response)

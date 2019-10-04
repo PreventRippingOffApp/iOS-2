@@ -10,7 +10,7 @@ import Foundation
 
 public struct Location: Encodable, Decodable {
     let description: String?
-    let location: [Float]?
+    let location: [Float]
     let title: String?
     
     public func encode(to encoder: Encoder) throws {

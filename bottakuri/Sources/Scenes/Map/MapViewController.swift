@@ -49,10 +49,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
     
     func addPin(location: Location) {
         let pin: MKPointAnnotation = MKPointAnnotation()
-        guard let loc = location.location else {
-            return
-        }
-        pin.coordinate = CLLocationCoordinate2D(latitude: CLLocationDegrees(loc[0]), longitude: CLLocationDegrees(loc[1]))
+        pin.coordinate = CLLocationCoordinate2D(latitude: CLLocationDegrees(location.location[0]), longitude: CLLocationDegrees(location.location[1]))
         
         pin.title = location.title
         pin.subtitle = location.description
@@ -63,7 +60,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
     func getLocations() {
         let request = GetLocations()
         Session.send(request) { result in
-            print(result)
             switch result {
                 case .success(let response):
                     response.locationData.forEach { location in
