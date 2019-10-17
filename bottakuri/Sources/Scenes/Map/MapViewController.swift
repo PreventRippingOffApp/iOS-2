@@ -49,7 +49,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
     
     func addPin(location: Location) {
         let pin: MKPointAnnotation = MKPointAnnotation()
-        pin.coordinate = CLLocationCoordinate2D(latitude: CLLocationDegrees(location.location[0]), longitude: CLLocationDegrees(location.location[1]))
+        pin.coordinate = CLLocationCoordinate2DMake(CLLocationDegrees(location.location[0]), CLLocationDegrees(location.location[1]))
         
         pin.title = location.title
         pin.subtitle = location.description
