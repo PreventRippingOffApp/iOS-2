@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="XfX-4l-iwR">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="XfX-4l-iwR">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Home View Controller-->
+        <!--Home-->
         <scene sceneID="Od4-04-c9Z">
             <objects>
                 <viewController id="hl2-Uq-b5R" customClass="HomeViewController" customModule="bottakuri" customModuleProvider="target" sceneMemberID="viewController">
@@ -16,13 +16,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ぼったくりのやつ" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YAf-VQ-qTj">
-                                <rect key="frame" x="35" y="166" width="345" height="110"/>
+                                <rect key="frame" x="35" y="166" width="345" height="61"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="46"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="S2H-Rg-x8d" customClass="circleButton" customModule="bottakuri" customModuleProvider="target">
-                                <rect key="frame" x="107" y="407" width="200" height="200"/>
+                                <rect key="frame" x="107" y="358" width="200" height="200"/>
                                 <color key="backgroundColor" red="0.8980392157" green="0.07917489985088276" blue="0.010987452763240315" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="S2H-Rg-x8d" secondAttribute="height" multiplier="1:1" id="TxC-fq-bYk"/>
@@ -35,16 +35,8 @@
                                     <action selector="record:" destination="hl2-Uq-b5R" eventType="touchUpInside" id="hSF-M9-NtP"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nec-Kp-UR4">
-                                <rect key="frame" x="111" y="656" width="194" height="51"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="32"/>
-                                <state key="normal" title="マップを見る"/>
-                                <connections>
-                                    <action selector="showMap:" destination="hl2-Uq-b5R" eventType="touchUpInside" id="NWT-aS-1Av"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nDW-8X-fzU">
-                                <rect key="frame" x="134" y="737" width="146" height="51"/>
+                                <rect key="frame" x="134" y="632" width="146" height="51"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="32"/>
                                 <state key="normal" title="通報">
                                     <color key="titleColor" red="0.8980392157" green="0.079174899849999994" blue="0.01098745276" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -62,20 +54,18 @@
                             <constraint firstItem="swo-kX-kqb" firstAttribute="trailing" secondItem="S2H-Rg-x8d" secondAttribute="trailing" constant="107" id="9jD-Tp-tia"/>
                             <constraint firstItem="nDW-8X-fzU" firstAttribute="leading" secondItem="swo-kX-kqb" secondAttribute="leading" constant="134" id="cAN-HY-y6d"/>
                             <constraint firstItem="YAf-VQ-qTj" firstAttribute="top" secondItem="swo-kX-kqb" secondAttribute="top" constant="78" id="hV6-0R-vt3"/>
-                            <constraint firstItem="nDW-8X-fzU" firstAttribute="top" secondItem="nec-Kp-UR4" secondAttribute="bottom" constant="30" id="i6y-CU-Zhz"/>
                             <constraint firstItem="YAf-VQ-qTj" firstAttribute="leading" secondItem="swo-kX-kqb" secondAttribute="leading" constant="35" id="l3x-80-dp9"/>
-                            <constraint firstItem="swo-kX-kqb" firstAttribute="trailing" secondItem="nec-Kp-UR4" secondAttribute="trailing" constant="109" id="l54-Ym-8vL"/>
                             <constraint firstItem="swo-kX-kqb" firstAttribute="bottom" secondItem="S2H-Rg-x8d" secondAttribute="bottom" constant="255" id="t7t-Fi-oUY"/>
                             <constraint firstItem="swo-kX-kqb" firstAttribute="trailing" secondItem="YAf-VQ-qTj" secondAttribute="trailing" constant="34" id="tEa-vz-L0u"/>
-                            <constraint firstItem="swo-kX-kqb" firstAttribute="bottom" secondItem="nDW-8X-fzU" secondAttribute="bottom" constant="74" id="vY6-CO-e5J"/>
-                            <constraint firstItem="nec-Kp-UR4" firstAttribute="leading" secondItem="swo-kX-kqb" secondAttribute="leading" constant="111" id="wcj-v3-wfu"/>
+                            <constraint firstItem="swo-kX-kqb" firstAttribute="bottom" secondItem="nDW-8X-fzU" secondAttribute="bottom" constant="130" id="vY6-CO-e5J"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="swo-kX-kqb"/>
                     </view>
+                    <tabBarItem key="tabBarItem" title="Home" image="house" catalog="system" id="i2H-qA-f7Y"/>
                     <navigationItem key="navigationItem" id="1WH-nY-oea"/>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="emergencyButton" destination="nDW-8X-fzU" id="K6L-y9-J9d"/>
-                        <outlet property="mapButton" destination="nec-Kp-UR4" id="C52-9b-Kcg"/>
                         <outlet property="recordButton" destination="S2H-Rg-x8d" id="VDW-NM-5k6"/>
                         <outlet property="titleLabel" destination="YAf-VQ-qTj" id="i2m-Za-cs2"/>
                     </connections>
@@ -103,4 +93,7 @@
             <point key="canvasLocation" x="86.956521739130437" y="109.82142857142857"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="house" catalog="system" width="64" height="54"/>
+    </resources>
 </document>
