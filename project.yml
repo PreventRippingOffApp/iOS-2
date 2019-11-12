@@ -17,7 +17,7 @@ targets:
       - path: bottakuri
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: ymgn.bottakuri
+        PRODUCT_BUNDLE_IDENTIFIER: yamagn.bottakuri
         ASSETCATALOG_COMPIER_APPICON_NAME: AppIcon
         INFOPLIST_FILE: bottakuri/Info.plist
       configs:
