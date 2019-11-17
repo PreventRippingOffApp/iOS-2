@@ -28,7 +28,6 @@ targets:
     dependencies:
       - carthage: SVProgressHUD
       - carthage: APIKit
-      - sdk: MapKit.framework
 
 schemes:
   bottakuri:

@@ -7,10 +7,16 @@
 //
 
 import UIKit
+import AVFoundation
 
 class HomeViewController: UIViewController {
     
     var isRecording: Bool = false
+    var audioRecorder: AVAudioRecorder?
+    var fileArray: [String] = []
+    var urlArray: [URL] = []
+    var url: URL?
+    let userDefaults = UserDefaults.standard
 
     @IBOutlet weak var titleLabel: UILabel! {
         didSet {
@@ -19,11 +25,6 @@ class HomeViewController: UIViewController {
     }
     @IBOutlet weak var recordButton: circleButton!
     
-    @IBOutlet weak var mapButton: UIButton! {
-        didSet {
-            mapButton.titleLabel?.adjustsFontSizeToFitWidth = true
-        }
-    }
     @IBOutlet weak var emergencyButton: UIButton! {
         didSet {
             emergencyButton.titleLabel?.adjustsFontSizeToFitWidth = true
@@ -32,13 +33,14 @@ class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
-    }
-    
-    @IBAction func showMap(_ sender: Any) {
-        let mapStoryBoard: UIStoryboard = UIStoryboard(name: "Map", bundle: nil)
-        let mapViewContorller: MapViewController = mapStoryBoard.instantiateViewController(withIdentifier: "Map") as! MapViewController
-        self.navigationController?.pushViewController(mapViewContorller, animated: true)
+        
+//        userDefaults.set([], forKey: "fileArray")
+        
+        self.fileArray = self.userDefaults.array(forKey: "fileArray") as! [String]
+        for file in fileArray {
+            let url = self.userDefaults.url(forKey: file)
+            self.urlArray.append(url!)
+        }
     }
     
     @IBAction func emergency(_ sender: Any) {
@@ -46,16 +48,68 @@ class HomeViewController: UIViewController {
         let emergencyViewContorller: EmergencyViewController = emergencyStoryBoard.instantiateViewController(withIdentifier: "Emergency") as! EmergencyViewController
         self.navigationController?.pushViewController(emergencyViewContorller, animated: true)
     }
+    @IBAction func showRecordList(_ sender: Any) {
+        let recordListStoryBoard: UIStoryboard = UIStoryboard(name: "RecordList", bundle: nil)
+        let recordListViewController: RecordListViewController = recordListStoryBoard.instantiateViewController(withIdentifier: "RecordList") as! RecordListViewController
+        self.navigationController?.pushViewController(recordListViewController, animated: true)
+    }
     
     @IBAction func record(_ sender: Any) {
         if isRecording {
-            isRecording = false
             toCircle()
+            guard let audioRecorder = self.audioRecorder else { fatalError("レコーダが見つかりませんでした") }
+            audioRecorder.stop()
+            userDefaults.set(self.fileArray, forKey: "fileArray")
+            userDefaults.set(self.url, forKey: fileArray.last!)
+            let session = AVAudioSession.sharedInstance()
+            try! session.setActive(false)
+            isRecording = false
         } else {
-            isRecording = true
             toSquare()
+            let session = AVAudioSession.sharedInstance()
+                       
+            do {
+                try session.setCategory(AVAudioSession.Category.playAndRecord)
+            } catch  {
+               fatalError("category err")
+            }
+
+            do {
+               try session.setActive(true)
+            } catch {
+               fatalError("session activate err")
+            }
+
+            let settings = [
+               AVFormatIDKey: Int(kAudioFormatLinearPCM),
+               AVSampleRateKey: 44100,
+               AVNumberOfChannelsKey: 1,
+               AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
+            ]
+            do {
+                self.audioRecorder = try AVAudioRecorder(url: getURL(), settings: settings)
+            } catch {
+                self.audioRecorder = nil
+            }
+            guard let audioRecorder = self.audioRecorder else { fatalError("recorder生成エラー") }
+            try! session.setActive(true)
+            audioRecorder.record()
+            isRecording = true
         }
-        
+    }
+    
+    func getURL() -> URL {
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        let docsDirect = paths[0]
+        let f = DateFormatter()
+        f.dateFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss"
+        f.locale = Locale(identifier: "ja_JP")
+        let now = f.string(from: Date())
+        self.url = docsDirect.appendingPathComponent(now)
+        guard let url = self.url else { fatalError("urlが取得できませんでした") }
+        self.fileArray.append(now)
+        self.urlArray.append(url)
+        return url
     }
     
     func toCircle() {
