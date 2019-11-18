@@ -9,7 +9,7 @@
 import UIKit
 import AVFoundation
 
-class HomeViewController: UIViewController {
+class HomeViewController: UIViewController, AVAudioRecorderDelegate {
     
     var isRecording: Bool = false
     var audioRecorder: AVAudioRecorder?
@@ -61,8 +61,6 @@ class HomeViewController: UIViewController {
             audioRecorder.stop()
             userDefaults.set(self.fileArray, forKey: "fileArray")
             userDefaults.set(self.url, forKey: fileArray.last!)
-            let session = AVAudioSession.sharedInstance()
-            try! session.setActive(false)
             isRecording = false
         } else {
             toSquare()
@@ -92,7 +90,7 @@ class HomeViewController: UIViewController {
                 self.audioRecorder = nil
             }
             guard let audioRecorder = self.audioRecorder else { fatalError("recorder生成エラー") }
-            try! session.setActive(true)
+            audioRecorder.delegate = self
             audioRecorder.record()
             isRecording = true
         }

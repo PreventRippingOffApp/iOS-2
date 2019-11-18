@@ -15,6 +15,7 @@ class RecordListViewController: UIViewController, UITableViewDelegate, UITableVi
     let userDefaults = UserDefaults.standard
     var dataList: [Record] = []
     var isPlaying = false
+    var audioPlayer: AVAudioPlayer!
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -52,21 +53,22 @@ class RecordListViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let audioEngine = AVAudioEngine()
-        let audioFile = try! AVAudioFile(forReading: dataList[indexPath.row].url)
-        let audioPlayerNode = AVAudioPlayerNode()
-        audioEngine.attach(audioPlayerNode)
-        audioEngine.connect(audioPlayerNode, to: audioEngine.outputNode, format: audioFile.processingFormat)
         if !isPlaying {
-            print("Playing")
-            try! audioEngine.start()
-            audioPlayerNode.play()
+            self.audioPlayer = try! AVAudioPlayer(contentsOf: dataList[indexPath.row].url)
+            self.audioPlayer.delegate = self
+            self.audioPlayer.play()
+            
             isPlaying = true
         } else {
-            print("Stopped")
-            audioEngine.stop()
-            audioPlayerNode.stop()
-            audioPlayerNode.scheduleFile(audioFile, at: nil)
+            self.audioPlayer.stop()
+            isPlaying = false
+        }
+    }
+    
+    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+        if flag {
+            audioPlayer.stop()
+            isPlaying = false
         }
     }
 }
