@@ -8,7 +8,9 @@ attributes:
   ORGANIZATIONNAME: ymgn
 fileGroups:
   - bottakuri
-
+settingGroups:
+  app:
+    DEVELOPMENT_TEAM: 7F6B255837
 targets:
   bottakuri:
     type: application
@@ -28,7 +30,6 @@ targets:
     dependencies:
       - carthage: SVProgressHUD
       - carthage: APIKit
-      - sdk: MapKit.framework
 
 schemes:
   bottakuri:
