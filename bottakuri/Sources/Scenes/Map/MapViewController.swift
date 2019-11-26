@@ -12,12 +12,15 @@ import CoreLocation
 import APIKit
 import SVProgressHUD
 
-class MapViewController: UIViewController, CLLocationManagerDelegate {
+class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate {
     @IBOutlet weak var mapView: MKMapView!
     let locationManager = CLLocationManager()
+    var userLocation: CLLocationCoordinate2D?
+    var fillColor: UIColor?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        mapView.delegate = self
         startUpdatingLocation()
         getLocations()
     }
@@ -31,8 +34,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
             break
         }
         if let userLocation = locationManager.location?.coordinate {
-            let viewRegion = MKCoordinateRegion(center: userLocation, latitudinalMeters: 10000, longitudinalMeters: 10000)
+            let viewRegion = MKCoordinateRegion(center: userLocation, latitudinalMeters: 1000, longitudinalMeters: 1000)
             mapView.setRegion(viewRegion, animated: false)
+            self.userLocation = userLocation
         }
         
         locationManager.startUpdatingLocation()
@@ -47,24 +51,44 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
         present(alert, animated: true, completion: nil)
     }
     
-    func addPin(location: Location) {
-        let pin: MKPointAnnotation = MKPointAnnotation()
-        pin.coordinate = CLLocationCoordinate2DMake(CLLocationDegrees(location.location[0]), CLLocationDegrees(location.location[1]))
-        
-        pin.title = location.title
-        pin.subtitle = location.description
-        
-        mapView.addAnnotation(pin)
+//    func addPin(location: Location) {
+//        let pin: MKPointAnnotation = MKPointAnnotation()
+//        pin.coordinate = CLLocationCoordinate2DMake(CLLocationDegrees(location.location[0]), CLLocationDegrees(location.location[1]))
+//
+//        pin.title = location.title
+//        pin.subtitle = location.description
+//
+//        mapView.addAnnotation(pin)
+//    }
+    
+    
+    
+    func paintColor(count: Int) {
+        guard let location = self.userLocation else { return }
+        let overlay = MKCircle(center: CLLocationCoordinate2D(latitude: location.latitude, longitude: location.longitude), radius:500)
+        if count == 1 {
+            self.fillColor = UIColor(red: 0.5, green: 0.5, blue: 0.0, alpha: 0.5)
+        } else if count > 4 {
+            self.fillColor = UIColor(red: 0.7, green: 0.0, blue: 0.0, alpha: 0.5)
+        } else {
+            self.fillColor = UIColor(red: 0.0, green: 0.7, blue: 0.0, alpha: 0.5)
+        }
+        self.mapView.addOverlay(overlay)
+    }
+    
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        let renderer = MKCircleRenderer(overlay: overlay)
+        renderer.fillColor = self.fillColor
+        renderer.lineWidth = 1.0
+        return renderer
     }
     
     func getLocations() {
-        let request = GetLocations()
+        let request = GetLocations(lat: self.userLocation?.latitude, long: self.userLocation?.longitude)
         Session.send(request) { result in
             switch result {
                 case .success(let response):
-                    response.locationData.forEach { location in
-                        self.addPin(location: location)
-                    }
+                    self.paintColor(count: response.locationData.count)
                 default:
                     break
             }

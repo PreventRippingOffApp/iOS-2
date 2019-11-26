@@ -43,6 +43,13 @@ public struct GetLocations: locationRequest {
         return "/sendLocation"
     }
     
+    public var parameters: Any? {
+        return ["lat": lat, "long": long]
+    }
+    
+    let lat: Double?
+    let long: Double?
+    
     public func response(from object: Any, urlResponse: HTTPURLResponse) throws -> LocationGetResponse {
         guard let data = object as? Data else {
             throw ResponseError.unexpectedObject(object)
