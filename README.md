@@ -9,4 +9,3 @@ $ xcodegen
 ### 使用ライブラリ
 - APIKit
 - SVProgressHUD
-- Mapbox
