@@ -44,11 +44,12 @@ public struct GetLocations: locationRequest {
     }
     
     public var parameters: Any? {
-        return ["lat": lat, "long": long]
+        return ["lat": lat, "lng": lng, "maxdistance": distance]
     }
     
-    let lat: Double?
-    let long: Double?
+    let lat: Double
+    let lng: Double
+    let distance: Double
     
     public func response(from object: Any, urlResponse: HTTPURLResponse) throws -> LocationGetResponse {
         guard let data = object as? Data else {

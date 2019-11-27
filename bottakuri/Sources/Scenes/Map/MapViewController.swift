@@ -84,12 +84,14 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     }
     
     func getLocations() {
-        let request = GetLocations(lat: self.userLocation?.latitude, long: self.userLocation?.longitude)
+        guard let location = self.userLocation else { return }
+        let request = GetLocations(lat: location.latitude, lng: location.longitude, distance: 1.0)
         Session.send(request) { result in
             switch result {
                 case .success(let response):
                     self.paintColor(count: response.locationData.count)
                 default:
+                    print(result)
                     break
             }
         }
