@@ -17,6 +17,7 @@ class HomeViewController: UIViewController, AVAudioRecorderDelegate {
     var urlArray: [URL] = []
     var url: URL?
     let userDefaults = UserDefaults.standard
+    var isReadForReport: Bool = false
 
     @IBOutlet weak var titleLabel: UILabel! {
         didSet {
@@ -40,6 +41,20 @@ class HomeViewController: UIViewController, AVAudioRecorderDelegate {
         for file in fileArray {
             let url = self.userDefaults.url(forKey: file)
             self.urlArray.append(url!)
+        }
+        NotificationCenter.default.addObserver(self, selector: #selector(self.volumeChanged(notification:)), name: NSNotification.Name("AVSystemController_SystemVolumeDidChangeNotification"), object: nil)
+    }
+    
+    @objc func volumeChanged(notification: NSNotification) {
+        if self.isReadForReport {
+            if let userInfo = notification.userInfo {
+                if let volumeChangeType = userInfo["AVSystemController_AudioVolumeChangeReasonNotificationParameter"] as? String {
+                    if volumeChangeType == "ExplicitVolumeChange" {
+                        print("changed! \(userInfo)")
+                        // 通報の処理
+                    }
+                }
+            }
         }
     }
     
@@ -93,6 +108,10 @@ class HomeViewController: UIViewController, AVAudioRecorderDelegate {
             audioRecorder.delegate = self
             audioRecorder.record()
             isRecording = true
+            
+            // ここら辺にCoreMLでの判定
+            // 通報可能になったら
+            // self.isReadyForReport = true
         }
     }
     
