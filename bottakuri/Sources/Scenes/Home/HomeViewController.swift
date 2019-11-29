@@ -140,6 +140,10 @@ class HomeViewController: UIViewController, AVAudioRecorderDelegate {
     @IBAction func record(_ sender: Any) {
         if isRecording {
             toCircle()
+            guard let audioRecorder = self.audioRecorder else { fatalError("レコーダが見つかりませんでした") }
+            audioRecorder.stop()
+            userDefaults.set(self.fileArray, forKey: "fileArray")
+            userDefaults.set(self.url, forKey: fileArray.last!)
             self.recognitionTask?.cancel()
             self.recognitionTask?.finish()
             self.audioEngine.stop()
@@ -177,10 +181,6 @@ class HomeViewController: UIViewController, AVAudioRecorderDelegate {
             audioRecorder.record()
             try! startRecording()
             isRecording = true
-            
-            // ここら辺にCoreMLでの判定
-            // 通報可能になったら
-//             self.isReadForReport = true
         }
     }
     
