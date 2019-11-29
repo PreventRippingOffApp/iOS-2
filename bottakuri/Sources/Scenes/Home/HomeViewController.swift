@@ -38,15 +38,19 @@ class HomeViewController: UIViewController, AVAudioRecorderDelegate {
         
 //        userDefaults.set([], forKey: "fileArray")
         
-        self.fileArray = self.userDefaults.array(forKey: "fileArray") as! [String]
-        for file in fileArray {
-            let url = self.userDefaults.url(forKey: file)
-            self.urlArray.append(url!)
-        }
         let volumeView = MPVolumeView(frame: CGRect(origin:CGPoint(x:/*-3000*/ 0, y:0), size:CGSize.zero))
         self.view.addSubview(volumeView)
         NotificationCenter.default.addObserver(self, selector: #selector(HomeViewController.volumeChanged(notification:)), name:
         NSNotification.Name("AVSystemController_SystemVolumeDidChangeNotification"), object: nil)
+        
+        guard let fileArray = self.userDefaults.array(forKey: "fileArray") else {
+            print("fileArray not found")
+            return
+        }
+        for file in fileArray {
+            let url = self.userDefaults.url(forKey: file as! String)
+            self.urlArray.append(url!)
+        }
     }
     
     @objc func volumeChanged(notification: NSNotification) {
