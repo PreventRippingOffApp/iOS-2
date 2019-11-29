@@ -8,6 +8,7 @@
 
 import UIKit
 import AVFoundation
+import MediaPlayer
 
 class HomeViewController: UIViewController, AVAudioRecorderDelegate {
     
@@ -17,7 +18,7 @@ class HomeViewController: UIViewController, AVAudioRecorderDelegate {
     var urlArray: [URL] = []
     var url: URL?
     let userDefaults = UserDefaults.standard
-    var isReadForReport: Bool = false
+    var isReadForReport: Bool = true
 
     @IBOutlet weak var titleLabel: UILabel! {
         didSet {
@@ -42,7 +43,10 @@ class HomeViewController: UIViewController, AVAudioRecorderDelegate {
             let url = self.userDefaults.url(forKey: file)
             self.urlArray.append(url!)
         }
-        NotificationCenter.default.addObserver(self, selector: #selector(self.volumeChanged(notification:)), name: NSNotification.Name("AVSystemController_SystemVolumeDidChangeNotification"), object: nil)
+        let volumeView = MPVolumeView(frame: CGRect(origin:CGPoint(x:/*-3000*/ 0, y:0), size:CGSize.zero))
+        self.view.addSubview(volumeView)
+        NotificationCenter.default.addObserver(self, selector: #selector(HomeViewController.volumeChanged(notification:)), name:
+        NSNotification.Name("AVSystemController_SystemVolumeDidChangeNotification"), object: nil)
     }
     
     @objc func volumeChanged(notification: NSNotification) {
@@ -111,7 +115,7 @@ class HomeViewController: UIViewController, AVAudioRecorderDelegate {
             
             // ここら辺にCoreMLでの判定
             // 通報可能になったら
-            // self.isReadyForReport = true
+//             self.isReadForReport = true
         }
     }
     
