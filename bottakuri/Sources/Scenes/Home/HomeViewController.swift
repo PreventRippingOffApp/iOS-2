@@ -58,8 +58,11 @@ class HomeViewController: UIViewController, AVAudioRecorderDelegate {
             if let userInfo = notification.userInfo {
                 if let volumeChangeType = userInfo["AVSystemController_AudioVolumeChangeReasonNotificationParameter"] as? String {
                     if volumeChangeType == "ExplicitVolumeChange" {
-                        print("changed! \(userInfo)")
-                        // 通報の処理
+                        let alert = UIAlertController(title: nil, message: "通報しました", preferredStyle: .alert)
+                        alert.addAction(UIAlertAction.init(title: "OK", style: .default, handler: { (_) in
+                            self.dismiss(animated: true, completion: nil)
+                        }))
+                        present(alert, animated: true, completion: nil)
                     }
                 }
             }
