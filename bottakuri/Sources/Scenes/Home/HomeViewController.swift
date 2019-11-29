@@ -9,6 +9,7 @@
 import UIKit
 import AVFoundation
 import MediaPlayer
+import Speech
 
 class HomeViewController: UIViewController, AVAudioRecorderDelegate {
     
@@ -33,6 +34,27 @@ class HomeViewController: UIViewController, AVAudioRecorderDelegate {
         }
     }
     
+    private let speechRecognizer = SFSpeechRecognizer(locale: Locale(identifier: "ja-JP"))!
+    private var recognitionTask: SFSpeechRecognitionTask?
+    private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest = SFSpeechAudioBufferRecognitionRequest()
+    private var audioEngine = AVAudioEngine()
+    private var inputText: String = ""
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        SFSpeechRecognizer.requestAuthorization { (status) in
+            OperationQueue.main.addOperation {
+                        switch status {
+                        case .authorized:   // 許可OK
+                            self.recordButton.isEnabled = true
+                        default:
+                            self.recordButton.isEnabled = false
+                }
+            }
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -43,14 +65,34 @@ class HomeViewController: UIViewController, AVAudioRecorderDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(HomeViewController.volumeChanged(notification:)), name:
         NSNotification.Name("AVSystemController_SystemVolumeDidChangeNotification"), object: nil)
         
-        guard let fileArray = self.userDefaults.array(forKey: "fileArray") else {
-            print("fileArray not found")
-            return
-        }
+        guard let fileArray = self.userDefaults.array(forKey: "fileArray") else { return }
         for file in fileArray {
             let url = self.userDefaults.url(forKey: file as! String)
             self.urlArray.append(url!)
         }
+    }
+    
+    private func startRecording() throws {
+        self.recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
+        self.audioEngine = AVAudioEngine()
+        let recordingFormat = audioEngine.inputNode.outputFormat(forBus: 0)
+        audioEngine.inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer: AVAudioPCMBuffer, when: AVAudioTime) in
+            self.recognitionRequest.append(buffer)
+        }
+        try audioEngine.start()
+        
+        recognitionTask = speechRecognizer.recognitionTask(with: self.recognitionRequest) { (result, error) in
+            if let result = result {
+                print(result.bestTranscription.formattedString)
+                self.inputText = result.bestTranscription.formattedString
+            }
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0, execute: {
+            self.recognitionTask?.cancel()
+            self.recognitionTask?.finish()
+            self.audioEngine.stop()
+            try! self.startRecording()
+        })
     }
     
     @objc func volumeChanged(notification: NSNotification) {
@@ -83,10 +125,12 @@ class HomeViewController: UIViewController, AVAudioRecorderDelegate {
     @IBAction func record(_ sender: Any) {
         if isRecording {
             toCircle()
-            guard let audioRecorder = self.audioRecorder else { fatalError("レコーダが見つかりませんでした") }
-            audioRecorder.stop()
-            userDefaults.set(self.fileArray, forKey: "fileArray")
-            userDefaults.set(self.url, forKey: fileArray.last!)
+            if audioEngine.isRunning {
+            // 音声エンジン動作中なら停止
+                audioEngine.stop()
+                recognitionRequest.endAudio()
+                return
+            }
             isRecording = false
         } else {
             toSquare()
@@ -118,6 +162,7 @@ class HomeViewController: UIViewController, AVAudioRecorderDelegate {
             guard let audioRecorder = self.audioRecorder else { fatalError("recorder生成エラー") }
             audioRecorder.delegate = self
             audioRecorder.record()
+            try! startRecording()
             isRecording = true
             
             // ここら辺にCoreMLでの判定
