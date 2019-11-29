@@ -19,7 +19,7 @@ class HomeViewController: UIViewController, AVAudioRecorderDelegate {
     var urlArray: [URL] = []
     var url: URL?
     let userDefaults = UserDefaults.standard
-    var isReadForReport: Bool = true
+    var isReadForReport: Bool = false
 
     @IBOutlet weak var titleLabel: UILabel! {
         didSet {
@@ -58,8 +58,6 @@ class HomeViewController: UIViewController, AVAudioRecorderDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        userDefaults.set([], forKey: "fileArray")
-        
         let volumeView = MPVolumeView(frame: CGRect(origin:CGPoint(x:/*-3000*/ 0, y:0), size:CGSize.zero))
         self.view.addSubview(volumeView)
         NotificationCenter.default.addObserver(self, selector: #selector(HomeViewController.volumeChanged(notification:)), name:
@@ -85,13 +83,29 @@ class HomeViewController: UIViewController, AVAudioRecorderDelegate {
             if let result = result {
                 print(result.bestTranscription.formattedString)
                 self.inputText = result.bestTranscription.formattedString
+                
+                if self.inputText == "殺すぞ" {
+                    let alert = UIAlertController(title: nil, message: "通報の準備が整いました", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction.init(title: "OK", style: .default, handler: { (_) in
+                        self.dismiss(animated: true, completion: nil)
+                    }))
+                    self.present(alert, animated: true, completion: nil)
+                    self.isReadForReport = true
+                }
+            }
+            
+            if error != nil {
+                print("fails with error: \(error!.localizedDescription)")
             }
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0, execute: {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 10.0, execute: {
             self.recognitionTask?.cancel()
             self.recognitionTask?.finish()
             self.audioEngine.stop()
-            try! self.startRecording()
+            print("RESTART")
+            if !self.isReadForReport || self.isRecording {
+                try! self.startRecording()
+            }
         })
     }
     
@@ -105,6 +119,7 @@ class HomeViewController: UIViewController, AVAudioRecorderDelegate {
                             self.dismiss(animated: true, completion: nil)
                         }))
                         present(alert, animated: true, completion: nil)
+                        self.isReadForReport = false
                     }
                 }
             }
@@ -125,12 +140,10 @@ class HomeViewController: UIViewController, AVAudioRecorderDelegate {
     @IBAction func record(_ sender: Any) {
         if isRecording {
             toCircle()
-            if audioEngine.isRunning {
-            // 音声エンジン動作中なら停止
-                audioEngine.stop()
-                recognitionRequest.endAudio()
-                return
-            }
+            self.recognitionTask?.cancel()
+            self.recognitionTask?.finish()
+            self.audioEngine.stop()
+            self.audioEngine.inputNode.removeTap(onBus: 0)
             isRecording = false
         } else {
             toSquare()
