@@ -19,15 +19,14 @@ class RecordListViewController: UIViewController, UITableViewDelegate, UITableVi
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        let audioFiles = userDefaults.array(forKey: "fileArray") as! [String]
-        for file in audioFiles {
-            let url = userDefaults.url(forKey: file)
-            let record = Record(name: file, url: url!)
-            dataList.append(record)
-        }
-
         let recordNib = UINib(nibName: "RecordListCell", bundle: nil)
         tableView.register(recordNib, forCellReuseIdentifier: "RecordListCell")
+        guard let audioFiles = self.userDefaults.array(forKey: "fileArray") else { return }
+        for file in audioFiles {
+            let url = userDefaults.url(forKey: file as! String)
+            let record = Record(name: file as! String, url: url!)
+            dataList.append(record)
+            }
         self.tableView.reloadData()
     }
     
