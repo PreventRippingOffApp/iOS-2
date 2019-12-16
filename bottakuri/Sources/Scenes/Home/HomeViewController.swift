@@ -10,6 +10,7 @@ import UIKit
 import AVFoundation
 import MediaPlayer
 import Speech
+import AudioToolbox
 
 class HomeViewController: UIViewController, AVAudioRecorderDelegate {
     
@@ -84,12 +85,8 @@ class HomeViewController: UIViewController, AVAudioRecorderDelegate {
                 print(result.bestTranscription.formattedString)
                 self.inputText = result.bestTranscription.formattedString
                 
-                if self.inputText == "殺すぞ" {
-                    let alert = UIAlertController(title: nil, message: "通報の準備が整いました", preferredStyle: .alert)
-                    alert.addAction(UIAlertAction.init(title: "OK", style: .default, handler: { (_) in
-                        self.dismiss(animated: true, completion: nil)
-                    }))
-                    self.present(alert, animated: true, completion: nil)
+                if self.inputText.contains("殺すぞ") {
+                    self.vibrate()
                     self.isReadForReport = true
                 }
             }
@@ -107,6 +104,30 @@ class HomeViewController: UIViewController, AVAudioRecorderDelegate {
                 try! self.startRecording()
             }
         })
+    }
+    
+    func vibrate() {
+        if let audioRecorder = self.audioRecorder {
+            audioRecorder.pause()
+            self.audioEngine.pause()
+            AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3.0, execute: {
+                audioRecorder.record()
+            })
+        }
+        if self.audioEngine.isRunning {
+            print("pause!")
+            self.audioEngine.pause()
+            AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3.0, execute: {
+                do {
+                    try self.audioEngine.start()
+                } catch let error {
+                  print("An error occurred starting audio engine. \(error.localizedDescription)")
+                }
+            })
+        }
+        AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
     }
     
     @objc func volumeChanged(notification: NSNotification) {
