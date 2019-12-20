@@ -18,11 +18,24 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     var userLocation: CLLocationCoordinate2D?
     var fillColor: UIColor?
     
+    var progressView:UIProgressView!
+    var progress:Float = 0.4
+    
+    @IBOutlet weak var whiteView: UIView!
+    @IBOutlet weak var recordButton: UIButton!
+    @IBOutlet weak var settingButton: UIButton!
+    @IBOutlet weak var recordListButton: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         mapView.delegate = self
         startUpdatingLocation()
         getLocations()
+        setProgress()
+        drawWhite()
+        drawRecordButton()
+        drawSettingButton()
+        drawRecordListButton()
     }
     
     private func startUpdatingLocation() {
@@ -61,6 +74,20 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
 //        mapView.addAnnotation(pin)
 //    }
     
+    func setProgress(){
+        progressView = UIProgressView(frame: CGRect(x:0,y:0,width:3*UIScreen.main.bounds.height/5,height:UIScreen.main.bounds.width))
+        progressView.center = CGPoint(x: self.view.bounds.maxX-30, y: 5*self.view.bounds.midY/6)
+        progressView.progressTintColor = .red
+        progressView.setProgress(progress, animated: true)
+        progressView.transform = CGAffineTransform(rotationAngle: .pi * -0.5).concatenating(CGAffineTransform(scaleX: 20.0, y: 1.0))
+        view.addSubview(progressView)
+    }
+    
+    func updateProgress(prgCnt: Int){
+        let prgPercentage:Float = Float(prgCnt / 10)
+        progressView.setProgress(prgPercentage, animated: true)
+    }
+    
     
     
     func paintColor(count: Int) {
@@ -90,10 +117,50 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
             switch result {
                 case .success(let response):
                     self.paintColor(count: response.locationData.count)
+                    self.updateProgress(prgCnt: response.locationData.count)
                 default:
                     print(result)
                     break
             }
         }
     }
+    
+    func drawWhite(){
+        whiteView.layer.cornerRadius = 20
+        whiteView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        whiteView.frame = CGRect(x:0,y:4*self.view.bounds.maxY/5,width:self.view.bounds.maxX,height:self.view.bounds.maxY/5)
+    }
+    
+    func drawRecordButton(){
+        recordButton.frame.size = CGSize(width: self.view.bounds.maxX/3, height: self.view.bounds.maxY/15)
+        recordButton.layer.cornerRadius = 20
+        recordButton.backgroundColor = UIColor(
+            red:1.0, green: 0.0, blue: 0.0, alpha: 0.7)
+        recordButton.setTitle("🐱", for: .normal)
+        recordButton.layer.position = CGPoint(x: self.view.bounds.midX, y:self.view.bounds.maxY/100)
+
+    }
+    
+    func drawSettingButton(){
+        settingButton.frame.size = CGSize(width: self.view.bounds.maxX/3, height: self.view.bounds.maxY/15)
+        settingButton.layer.cornerRadius = 3
+        settingButton.layer.borderWidth = 1
+        settingButton.layer.borderColor = UIColor.black.cgColor
+        settingButton.setTitle("設定", for: .normal)
+        settingButton.setTitleColor(UIColor.black, for: UIControl.State.normal)
+        settingButton.layer.position = CGPoint(x: self.view.bounds.midX/2, y:self.view.bounds.maxY/10)
+    }
+    
+    func drawRecordListButton(){
+        recordListButton.frame.size = CGSize(width: self.view.bounds.maxX/3, height: self.view.bounds.maxY/15)
+             recordListButton.layer.cornerRadius = 3
+             recordListButton.layer.borderWidth = 1
+             recordListButton.layer.borderColor = UIColor.black.cgColor
+             recordListButton.setTitle("ログ", for: .normal)
+             recordListButton.setTitleColor(UIColor.black, for: UIControl.State.normal)
+             recordListButton.layer.position = CGPoint(x: 3*self.view.bounds.midX/2, y:self.view.bounds.maxY/10)
+        
+    }
+    
+
 }
