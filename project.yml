@@ -17,6 +17,10 @@ targets:
     platform: iOS
     sources:
       - path: bottakuri
+    attributes:
+      SystemCapabilities:
+        com.apple.BackgroundModes:
+          enabled: 1
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: yamagn.bottakuri

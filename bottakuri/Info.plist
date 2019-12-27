@@ -35,6 +35,10 @@
 	<string>録音のためマイクを使用します</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>危険検知に使用します</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>audio</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
