@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Vqd-Xy-DdU">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Emergency View Controller-->
+        <scene sceneID="1R3-Od-m7f">
+            <objects>
+                <viewController storyboardIdentifier="Emergency" id="sIB-yI-wcc" customClass="EmergencyViewController" customModule="bottakuri" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="6Uc-MF-TzS">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CLi-WN-2SX">
+                                <rect key="frame" x="80" y="320.5" width="254" height="255"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="256" id="2L9-0u-X8b"/>
+                                    <constraint firstAttribute="width" constant="254" id="vIV-Z2-Zy6"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" backgroundImage="phone.circle.fill" catalog="system"/>
+                                <connections>
+                                    <action selector="emergencyCall:" destination="sIB-yI-wcc" eventType="touchUpInside" id="N4x-nt-1Ty"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="タップで通報する" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7jh-J9-ju4">
+                                <rect key="frame" x="6" y="648" width="402" height="60"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="50"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="CLi-WN-2SX" firstAttribute="leading" secondItem="ZKo-iP-Qbp" secondAttribute="leading" constant="80" id="3KO-oh-IZx"/>
+                            <constraint firstItem="7jh-J9-ju4" firstAttribute="top" secondItem="CLi-WN-2SX" secondAttribute="bottom" constant="72" id="B5w-Si-yh1"/>
+                            <constraint firstItem="CLi-WN-2SX" firstAttribute="top" secondItem="ZKo-iP-Qbp" secondAttribute="top" constant="232" id="Mq3-ga-TxF"/>
+                            <constraint firstItem="ZKo-iP-Qbp" firstAttribute="bottom" secondItem="CLi-WN-2SX" secondAttribute="bottom" constant="286" id="Pe4-fm-hTi"/>
+                            <constraint firstItem="ZKo-iP-Qbp" firstAttribute="trailing" secondItem="CLi-WN-2SX" secondAttribute="trailing" constant="80" id="SPr-fi-UKJ"/>
+                            <constraint firstItem="ZKo-iP-Qbp" firstAttribute="bottom" secondItem="7jh-J9-ju4" secondAttribute="bottom" constant="154" id="ekE-D5-OHK"/>
+                            <constraint firstItem="7jh-J9-ju4" firstAttribute="leading" secondItem="ZKo-iP-Qbp" secondAttribute="leading" constant="6" id="xIf-yr-n9l"/>
+                            <constraint firstItem="ZKo-iP-Qbp" firstAttribute="trailing" secondItem="7jh-J9-ju4" secondAttribute="trailing" constant="6" id="yHL-kz-GiO"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="ZKo-iP-Qbp"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="fvy-1p-e2S"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="IPH-yZ-rp6" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1002.8985507246377" y="131.91964285714286"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="IgP-ng-sMi">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Vqd-Xy-DdU" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="NDT-FA-EP6">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="sIB-yI-wcc" kind="relationship" relationship="rootViewController" id="1U9-x7-hBB"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="VQh-ql-5DJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="92.753623188405811" y="131.91964285714286"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="phone.circle.fill" catalog="system" width="64" height="60"/>
+    </resources>
+</document>
