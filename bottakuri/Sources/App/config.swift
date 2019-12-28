@@ -6,4 +6,4 @@
 //  Copyright © 2019 ymgn. All rights reserved.
 //
 
-let BASE_URL="http://18.223.132.39:5000"
+let BASE_URL="http://18.216.11.14:5000"
