@@ -243,6 +243,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     
     @IBAction func showSetting(_ sender: Any) {
         // TODO: Settignページを作る
+        let settingStoryBoard: UIStoryboard = UIStoryboard(name: "Setting", bundle: nil)
+        let settingViewController: SettingViewController = settingStoryBoard.instantiateViewController(withIdentifier: "Setting") as! SettingViewController
+        self.navigationController?.pushViewController(settingViewController, animated: true)
     }
     
     @IBAction func showLog(_ sender: Any) {
