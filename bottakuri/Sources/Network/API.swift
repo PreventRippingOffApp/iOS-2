@@ -40,7 +40,7 @@ public struct GetLocations: locationRequest {
     public typealias Response = LocationGetResponse
     public let method: HTTPMethod = .get
     public var path: String {
-        return "/sendLocation"
+        return "sendLocation"
     }
     
     public var parameters: Any? {
@@ -55,7 +55,9 @@ public struct GetLocations: locationRequest {
         guard let data = object as? Data else {
             throw ResponseError.unexpectedObject(object)
         }
-        return try JSONDecoder().decode(LocationGetResponse.self, from: data)
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        return try decoder.decode(LocationGetResponse.self, from: data)
     }
 }
 public struct LocationGetResponse: Decodable {
@@ -72,7 +74,7 @@ public struct PostLocation: locationRequest {
     public var location: Location
     public let method: HTTPMethod = .post
     public var path: String {
-        return "/saveLocation"
+        return "saveLocation"
     }
     public var bodyParameters: BodyParameters? {
         return JSONBodyParameters(JSONObject: [
@@ -84,10 +86,46 @@ public struct PostLocation: locationRequest {
         guard let data = object as? Data else {
             throw ResponseError.unexpectedObject(object)
         }
-        return try JSONDecoder().decode(LocationPostResponse.self, from: data)
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        return try decoder.decode(LocationPostResponse.self, from: data)
     }
 }
 public struct LocationPostResponse: Decodable {
     let errorStr: String?
     let isSave: Int
+}
+
+public struct GetRisk: locationRequest {
+    public var dataParser: DataParser {
+        return DecodableDataParser()
+    }
+    
+    public typealias Response = GetRiskResponse
+    public var path: String {
+        return "risk"
+    }
+    
+    public var method: HTTPMethod {
+        return .get
+    }
+    
+    public var parameters: Any? {
+        return ["lat": lat, "lng": lng]
+    }
+    
+    let lat: Double
+    let lng: Double
+    public func response(from object: Any, urlResponse: HTTPURLResponse) throws -> Response {
+        guard let data = object as? Data else {
+            throw ResponseError.unexpectedObject(object)
+        }
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        return try decoder.decode(Response.self, from: data)
+    }
+}
+
+public struct GetRiskResponse: Decodable {
+    let risk: Int
 }

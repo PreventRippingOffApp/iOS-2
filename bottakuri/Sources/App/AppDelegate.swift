@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import BackgroundTasks
+import CoreLocation
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
