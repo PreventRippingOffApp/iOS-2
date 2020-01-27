@@ -133,6 +133,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
             UIApplication.shared.registerUserNotificationSettings(settings)
         }
         
+//        locationManager.distanceFilter = 100
+//        locationManager.pausesLocationUpdatesAutomatically = true
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.activityType = .other
         
@@ -229,6 +231,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
                     Session.send(request) { result in
                         switch result {
                             case .success(let response):
+                                print(response)
                                 if response.risk > 5 {
                                     let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
                                     
