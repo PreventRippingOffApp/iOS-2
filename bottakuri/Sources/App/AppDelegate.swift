@@ -7,6 +7,20 @@
 //
 
 import UIKit
+import BackgroundTasks
+import CoreLocation
+
+class LocationOperation: Operation {
+    override func main() {
+        let dt = Date()
+        let dateFormatter = DateFormatter()
+
+        dateFormatter.dateFormat = DateFormatter.dateFormat(fromTemplate: "yMMMdHms", options: 0, locale: Locale(identifier: "ja_JP"))
+
+        print(dateFormatter.string(from: dt))
+//        self.manager.startUpdatingLocation()
+    }
+}
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -16,7 +30,37 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        BGTaskScheduler.shared.register(forTaskWithIdentifier: "yamagn.bottakuri.process", using: nil) { task in
+            self.handleAppProcessing(task: task as! BGProcessingTask)
+        }
         return true
+    }
+    
+    private func handleAppProcessing(task: BGProcessingTask) {
+        scheduleAppProcessing()
+        
+        let queue = OperationQueue()
+        queue.maxConcurrentOperationCount = 1
+        
+        task.expirationHandler = {
+            queue.cancelAllOperations()
+        }
+        let operation = LocationOperation()
+        operation.completionBlock = {
+            task.setTaskCompleted(success: operation.isFinished)
+        }
+        queue.addOperation(operation)
+    }
+    
+    private func scheduleAppProcessing() {
+        let request = BGProcessingTaskRequest(identifier: "yamagn.bottakuri.process")
+        request.requiresNetworkConnectivity = true
+        request.requiresExternalPower = true
+        do {
+            try BGTaskScheduler.shared.submit(request)
+        } catch {
+            print("Could not schedule app processing: \(error)")
+        }
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
@@ -27,6 +71,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+        self.scheduleAppProcessing()
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {

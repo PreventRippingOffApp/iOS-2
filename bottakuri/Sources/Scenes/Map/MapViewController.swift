@@ -15,17 +15,18 @@ import AVFoundation
 import MediaPlayer
 import Speech
 
-class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, AVAudioRecorderDelegate {
+class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, AVAudioRecorderDelegate, UNUserNotificationCenterDelegate {
     
     // Map
     @IBOutlet weak var mapView: MKMapView!
     let locationManager = CLLocationManager()
     var userLocation: CLLocationCoordinate2D?
     var fillColor: UIColor?
+    var deferringUpdates = false
     
     // Parameter Bar
     var progressView:UIProgressView!
-    var progress:Float = 0.4
+    var progress:Float = 0.0
     
     // Record
     var isRecording: Bool = false
@@ -96,17 +97,54 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     override func viewDidLoad() {
         super.viewDidLoad()
         mapView.delegate = self
+        locationManager.delegate = self
         startUpdatingLocation()
         getLocations()
+        getRisk()
         setProgress()
         guard let fileArray = self.userDefaults.array(forKey: "fileArray") else { return }
         for file in fileArray {
             let url = self.userDefaults.url(forKey: file as! String)
             self.urlArray.append(url!)
         }
+        
+        if #available(iOS 10.0, *) {
+            // iOS 10
+            let center = UNUserNotificationCenter.current()
+            center.requestAuthorization(options: [.badge, .sound, .alert], completionHandler: { (granted, error) in
+                if error != nil {
+                    return
+                }
+
+                if granted {
+                    print("通知許可")
+
+                    let center = UNUserNotificationCenter.current()
+                    center.delegate = self
+
+                } else {
+                    print("通知拒否")
+                }
+            })
+
+        } else {
+            // iOS 9以下
+            let settings = UIUserNotificationSettings(types: [.badge, .sound, .alert], categories: nil)
+            UIApplication.shared.registerUserNotificationSettings(settings)
+        }
+        
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.activityType = .other
+        
+        locationManager.allowsBackgroundLocationUpdates = true
     }
     
     // MARK: - Map
+    @objc private func locationUpdate() {
+        self.locationManager.stopUpdatingLocation()
+        self.locationManager.startUpdatingLocation()
+    }
+    
     private func startUpdatingLocation() {
         switch CLLocationManager.authorizationStatus() {
         case .notDetermined:
@@ -157,7 +195,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
         guard let location = self.userLocation else { return }
         let request = GetLocations(lat: location.latitude, lng: location.longitude, distance: 1.0)
         Session.send(request) { result in
-            print(result)
             switch result {
                 case .success(let response):
                     self.paintColor(count: response.locationData.count)
@@ -165,6 +202,49 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
                 default:
                     print(result)
                     break
+            }
+        }
+    }
+    
+    func getRisk() {
+        guard let location = self.userLocation else { return }
+        let request = GetRisk(lat: location.latitude, lng: location.longitude)
+        Session.send(request) { result in
+            switch result {
+                case .success(let response):
+                    self.updateProgress(prgCnt: response.risk)
+                case .failure(let error):
+                    print(error)
+            }
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        let lastLocation = locations.last
+        if let last = lastLocation {
+            let eventDate = last.timestamp
+            if abs(eventDate.timeIntervalSinceNow) < 15.0 {
+                if let location = manager.location {
+                    let request = GetRisk(lat: location.coordinate.latitude, lng: location.coordinate.longitude)
+                    Session.send(request) { result in
+                        switch result {
+                            case .success(let response):
+                                if response.risk > 5 {
+                                    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+                                    
+                                    let content = UNMutableNotificationContent()
+                                    content.title = "警告"
+                                    content.body = "危険なエリアに入りました"
+                                    content.sound = UNNotificationSound.default
+                                    
+                                    let request = UNNotificationRequest(identifier: "uuid", content: content, trigger: trigger)
+                                    UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
+                                }
+                            case .failure(let error):
+                                print(error)
+                        }
+                    }
+                }
             }
         }
     }
