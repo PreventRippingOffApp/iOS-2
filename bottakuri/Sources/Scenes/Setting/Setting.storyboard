@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="4uo-H9-adu">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="4uo-H9-adu">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -40,6 +40,9 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="8j0-CY-vKx" kind="show" id="CRX-gW-Owz"/>
+                                        </connections>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
@@ -102,10 +105,88 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="3LK-q1-yNG"/>
+                    <connections>
+                        <outlet property="nameLabel" destination="kbV-a7-Hix" id="61l-se-OSx"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3Zx-J2-5Oa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1881.1594202898552" y="129.91071428571428"/>
+        </scene>
+        <!--Setting Report Table View Controller-->
+        <scene sceneID="a2d-xE-2N7">
+            <objects>
+                <tableViewController id="8j0-CY-vKx" customClass="SettingReportTableViewController" customModule="bottakuri" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="DIg-mi-sXD">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <sections>
+                            <tableViewSection headerTitle="通報先の編集" id="bdF-0n-VZe">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="Ppr-c1-Dkc">
+                                        <rect key="frame" x="0.0" y="55.5" width="414" height="43.5"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Ppr-c1-Dkc" id="Q5F-lU-TEj">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="通報先の名前" textAlignment="natural" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="iCe-ef-hWy">
+                                                    <rect key="frame" x="16" y="16" width="382" height="12"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits" returnKeyType="done"/>
+                                                </textField>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="iCe-ef-hWy" secondAttribute="trailing" constant="16" id="04v-QR-Uqa"/>
+                                                <constraint firstItem="iCe-ef-hWy" firstAttribute="top" secondItem="Q5F-lU-TEj" secondAttribute="top" constant="16" id="Cxx-x7-ufA"/>
+                                                <constraint firstItem="iCe-ef-hWy" firstAttribute="leading" secondItem="Q5F-lU-TEj" secondAttribute="leading" constant="16" id="W2u-CG-LLq"/>
+                                                <constraint firstAttribute="bottom" secondItem="iCe-ef-hWy" secondAttribute="bottom" constant="16" id="i5w-jo-M6F"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                            <tableViewSection id="cDF-mF-7s8">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="osD-Cq-0D0">
+                                        <rect key="frame" x="0.0" y="135" width="414" height="43.5"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="osD-Cq-0D0" id="Uw3-Pl-tJ2">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="通報先の電話番号" textAlignment="natural" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="7zu-a4-H0z">
+                                                    <rect key="frame" x="16" y="16" width="382" height="12"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits" returnKeyType="done"/>
+                                                </textField>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="bottom" secondItem="7zu-a4-H0z" secondAttribute="bottom" constant="16" id="9WU-Pc-A6T"/>
+                                                <constraint firstItem="7zu-a4-H0z" firstAttribute="leading" secondItem="Uw3-Pl-tJ2" secondAttribute="leading" constant="16" id="KRG-OE-V7U"/>
+                                                <constraint firstItem="7zu-a4-H0z" firstAttribute="top" secondItem="Uw3-Pl-tJ2" secondAttribute="top" constant="16" id="RVw-RX-r4Y"/>
+                                                <constraint firstAttribute="trailing" secondItem="7zu-a4-H0z" secondAttribute="trailing" constant="16" id="bud-SI-ast"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                        <connections>
+                            <outlet property="dataSource" destination="8j0-CY-vKx" id="Cjp-5c-DzZ"/>
+                            <outlet property="delegate" destination="8j0-CY-vKx" id="FRz-Hd-vYx"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="OFQ-bZ-nSH"/>
+                    <connections>
+                        <outlet property="nameTextField" destination="iCe-ef-hWy" id="f2P-Bd-U7a"/>
+                        <outlet property="phoneNumberTextField" destination="7zu-a4-H0z" id="0ve-fd-FxX"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="NUG-so-Wgd" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2728" y="130"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="qCw-7a-KQI">

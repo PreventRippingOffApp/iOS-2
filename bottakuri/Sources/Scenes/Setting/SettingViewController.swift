@@ -10,16 +10,20 @@ import UIKit
 
 class SettingViewController: UITableViewController {
     
-    @IBOutlet weak var reportDesticationLabel: UILabel!
+    @IBOutlet weak var nameLabel: UILabel!
     
 
     override func numberOfSections(in tableView: UITableView) -> Int {
       return 2
     }
     
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 60
+    }
+    
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-      // それぞれのセクション毎に何行のセルがあるかを返します
+
       switch section {
       case 0: // 一般
         return 1
@@ -32,9 +36,23 @@ class SettingViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        NotificationCenter.default.addObserver(self, selector: #selector(userDefaultsDidChange),
+        name: UserDefaults.didChangeNotification, object: nil)
 
         // Do any additional setup after loading the view.
     }
+    
+    @objc func userDefaultsDidChange(_ notification: Notification) {
+      if let name = UserDefaults.standard.value(forKey: "name") as? String {
+        nameLabel.text = name
+      }
+    }
+
+    deinit {
+      NotificationCenter.default.removeObserver(self, name: UserDefaults.didChangeNotification, object: nil)
+    }
+    
+    
     
 
     /*
