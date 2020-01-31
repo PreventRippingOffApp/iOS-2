@@ -10,8 +10,9 @@ import UIKit
 import APIKit
 import SVProgressHUD
 import CoreLocation
+import MessageUI
 
-class EmergencyViewController: UIViewController, CLLocationManagerDelegate {
+class EmergencyViewController: UIViewController, CLLocationManagerDelegate, MFMailComposeViewControllerDelegate {
     let locationManager = CLLocationManager()
 
     override func viewDidLoad() {
@@ -20,12 +21,15 @@ class EmergencyViewController: UIViewController, CLLocationManagerDelegate {
     
     @IBAction func emergencyCall(_ sender: Any) {
         emergency()
+//          sendMail()
     }
     
+
+    
     func emergency() {
-//        if let number = URL(string: "tel://110"){
-//            UIApplication.shared.open(number, options: [:], completionHandler: nil)
-//        }
+        if let number = URL(string: "tel://110"){
+            UIApplication.shared.open(number, options: [:], completionHandler: nil)
+        }
         switch CLLocationManager.authorizationStatus() {
         case .notDetermined:
             locationManager.requestAlwaysAuthorization()
@@ -51,5 +55,6 @@ class EmergencyViewController: UIViewController, CLLocationManagerDelegate {
         }))
         present(alert, animated: true, completion: nil)
     }
+
     
 }
