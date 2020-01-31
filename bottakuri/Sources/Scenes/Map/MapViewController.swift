@@ -23,10 +23,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     let locationManager = CLLocationManager()
     var userLocation: CLLocationCoordinate2D?
     var fillColor: UIColor?
+    var deferringUpdates = false
     
     // Parameter Bar
     var progressView:UIProgressView!
-    var progress:Float = 0.4
+    var progress:Float = 0.0
     
     // Record
     var isRecording: Bool = false
@@ -97,17 +98,56 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     override func viewDidLoad() {
         super.viewDidLoad()
         mapView.delegate = self
+        locationManager.delegate = self
         startUpdatingLocation()
         getLocations()
+        getRisk()
         setProgress()
         guard let fileArray = self.userDefaults.array(forKey: "fileArray") else { return }
         for file in fileArray {
             let url = self.userDefaults.url(forKey: file as! String)
             self.urlArray.append(url!)
         }
+        
+        if #available(iOS 10.0, *) {
+            // iOS 10
+            let center = UNUserNotificationCenter.current()
+            center.requestAuthorization(options: [.badge, .sound, .alert], completionHandler: { (granted, error) in
+                if error != nil {
+                    return
+                }
+
+                if granted {
+                    print("通知許可")
+
+                    let center = UNUserNotificationCenter.current()
+                    center.delegate = self
+
+                } else {
+                    print("通知拒否")
+                }
+            })
+
+        } else {
+            // iOS 9以下
+            let settings = UIUserNotificationSettings(types: [.badge, .sound, .alert], categories: nil)
+            UIApplication.shared.registerUserNotificationSettings(settings)
+        }
+        
+//        locationManager.distanceFilter = 100
+//        locationManager.pausesLocationUpdatesAutomatically = true
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.activityType = .other
+        
+        locationManager.allowsBackgroundLocationUpdates = true
     }
     
     // MARK: - Map
+    @objc private func locationUpdate() {
+        self.locationManager.stopUpdatingLocation()
+        self.locationManager.startUpdatingLocation()
+    }
+    
     private func startUpdatingLocation() {
         switch CLLocationManager.authorizationStatus() {
         case .notDetermined:
@@ -158,7 +198,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
         guard let location = self.userLocation else { return }
         let request = GetLocations(lat: location.latitude, lng: location.longitude, distance: 1.0)
         Session.send(request) { result in
-            print(result)
             switch result {
                 case .success(let response):
                     self.paintColor(count: response.locationData.count)
@@ -166,6 +205,50 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
                 default:
                     print(result)
                     break
+            }
+        }
+    }
+    
+    func getRisk() {
+        guard let location = self.userLocation else { return }
+        let request = GetRisk(lat: location.latitude, lng: location.longitude)
+        Session.send(request) { result in
+            switch result {
+                case .success(let response):
+                    self.updateProgress(prgCnt: response.risk)
+                case .failure(let error):
+                    print(error)
+            }
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        let lastLocation = locations.last
+        if let last = lastLocation {
+            let eventDate = last.timestamp
+            if abs(eventDate.timeIntervalSinceNow) < 15.0 {
+                if let location = manager.location {
+                    let request = GetRisk(lat: location.coordinate.latitude, lng: location.coordinate.longitude)
+                    Session.send(request) { result in
+                        switch result {
+                            case .success(let response):
+                                print(response)
+                                if response.risk > 5 {
+                                    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+                                    
+                                    let content = UNMutableNotificationContent()
+                                    content.title = "警告"
+                                    content.body = "危険なエリアに入りました"
+                                    content.sound = UNNotificationSound.default
+                                    
+                                    let request = UNNotificationRequest(identifier: "uuid", content: content, trigger: trigger)
+                                    UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
+                                }
+                            case .failure(let error):
+                                print(error)
+                        }
+                    }
+                }
             }
         }
     }
@@ -207,6 +290,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
             self.recognitionTask?.finish()
             self.audioEngine.stop()
             self.audioEngine.inputNode.removeTap(onBus: 0)
+            print("stop")
             isRecording = false
         } else {
             let session = AVAudioSession.sharedInstance()
@@ -224,7 +308,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
             }
 
             let settings = [
-               AVFormatIDKey: Int(kAudioFormatLinearPCM),
+               AVFormatIDKey: Int(kAudioFormatFLAC),
                AVSampleRateKey: 44100,
                AVNumberOfChannelsKey: 1,
                AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
@@ -238,6 +322,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
             audioRecorder.delegate = self
             audioRecorder.record()
             try! startRecording()
+            print("start")
             isRecording = true
         }
     }
@@ -294,6 +379,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     func setVolumeView() {
         let volumeView = MPVolumeView(frame: CGRect(origin:CGPoint(x:/*-3000*/ 0, y:0), size:CGSize.zero))
         self.view.addSubview(volumeView)
+        print("set volume view")
         NotificationCenter.default.addObserver(self, selector: #selector(HomeViewController.volumeChanged(notification:)), name:
         NSNotification.Name("AVSystemController_SystemVolumeDidChangeNotification"), object: nil)
     }
@@ -329,6 +415,18 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
                 if let volumeChangeType = userInfo["AVSystemController_AudioVolumeChangeReasonNotificationParameter"] as? String {
                     if volumeChangeType == "ExplicitVolumeChange" {
                         sendMail()
+                        guard let audioRecorder = self.audioRecorder else { fatalError("レコーダが見つかりませんでした") }
+                        audioRecorder.stop()
+                        userDefaults.set(self.fileArray, forKey: "fileArray")
+                        userDefaults.set(self.url, forKey: fileArray.last!)
+                        self.recognitionTask?.cancel()
+                        self.recognitionTask?.finish()
+                        self.audioEngine.stop()
+                        self.audioEngine.inputNode.removeTap(onBus: 0)
+                        print("stop")
+                        isRecording = false
+                        
+                        self.sendAudioFile(url: self.url!)
                         let alert = UIAlertController(title: nil, message: "通報しました", preferredStyle: .alert)
                         alert.addAction(UIAlertAction.init(title: "OK", style: .default, handler: { (_) in
                             self.dismiss(animated: true, completion: nil)
@@ -341,8 +439,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
         }
     }
     
-
-        
     func sendMail() {
         //メール送信が可能なら
         if MFMailComposeViewController.canSendMail() {
@@ -405,6 +501,17 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
                 break
             }
             controller.dismiss(animated: true, completion: nil)
+    func sendAudioFile(url: URL) {
+        print(url)
+        guard let location = self.userLocation else { return }
+        let req = SendAudioFile(lat: location.latitude, lng: location.longitude, audioFileUrl: url)
+        Session.send(req) { result in
+            switch result {
+                case .success(let res):
+                    print(res)
+                case .failure(let error):
+                    print(error)
+            }
         }
     }
     
@@ -414,7 +521,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
         let f = DateFormatter()
         f.dateFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss"
         f.locale = Locale(identifier: "ja_JP")
-        let now = f.string(from: Date())
+        let now = f.string(from: Date()) + ".flac"
         self.url = docsDirect.appendingPathComponent(now)
         guard let url = self.url else { fatalError("urlが取得できませんでした") }
         self.fileArray.append(now)
