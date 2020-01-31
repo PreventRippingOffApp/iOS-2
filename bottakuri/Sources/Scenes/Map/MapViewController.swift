@@ -14,8 +14,9 @@ import SVProgressHUD
 import AVFoundation
 import MediaPlayer
 import Speech
+import MessageUI
 
-class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, AVAudioRecorderDelegate {
+class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, AVAudioRecorderDelegate,MFMailComposeViewControllerDelegate {
     
     // Map
     @IBOutlet weak var mapView: MKMapView!
@@ -322,10 +323,12 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     }
     
     @objc func volumeChanged(notification: NSNotification) {
+       
         if self.isReadForReport {
             if let userInfo = notification.userInfo {
                 if let volumeChangeType = userInfo["AVSystemController_AudioVolumeChangeReasonNotificationParameter"] as? String {
                     if volumeChangeType == "ExplicitVolumeChange" {
+                        sendMail()
                         let alert = UIAlertController(title: nil, message: "通報しました", preferredStyle: .alert)
                         alert.addAction(UIAlertAction.init(title: "OK", style: .default, handler: { (_) in
                             self.dismiss(animated: true, completion: nil)
@@ -335,6 +338,62 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
                     }
                 }
             }
+        }
+    }
+    
+
+        
+    func sendMail() {
+        //メール送信が可能なら
+        if MFMailComposeViewController.canSendMail() {
+
+            let f = DateFormatter()
+            f.timeStyle = .full
+            f.dateStyle = .full
+            f.locale = Locale(identifier: "ja_JP")
+            let now = Date()
+            print(f.string(from: now))
+            
+            guard let location = self.userLocation else { return }
+            //MFMailComposeVCのインスタンス
+            let mail = MFMailComposeViewController()
+            //MFMailComposeのデリゲート
+            mail.mailComposeDelegate = self
+            //送り先
+         mail.setToRecipients(["fpp.mail-110@fukuoka-police.jp"])
+
+            mail.setSubject("揉め事です")
+            //メッセージ本"
+            mail.setMessageBody("<p>1.発生場所</p><p>緯度\(location.latitude)</p><p>経度\(location.longitude)</p><p>2.発生時間</p><p>\(f.string(from: now))</p><p>3.被害状況</p><p>揉め事です</p><p>4.あなたの住所・氏名・現在地</p><p>福岡県中央区●●●</p>", isHTML: true)
+            //メールを表示
+            self.present(mail, animated: true, completion: nil)
+        //メール送信が不可能なら
+        } else {
+            //アラートで通知
+            let alert = UIAlertController(title: "No Mail Accounts", message: "Please set up mail accounts", preferredStyle: .alert)
+            let dismiss = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+            alert.addAction(dismiss)
+            self.present(alert, animated: true, completion: nil)
+        }
+    }
+        
+        //エラー処理
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        if error != nil {
+            //送信失敗
+            print(error ?? "")
+        } else {
+            switch result {
+            case .cancelled: break
+                //キャンセル
+            case .saved: break
+                //下書き保存
+            case .sent: break
+                //送信
+            default:
+                break
+            }
+            controller.dismiss(animated: true, completion: nil)
         }
     }
     
@@ -354,6 +413,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     
     // MARK: - UI Setting
     func setUI() {
+        setVolumeView()
         recordButton.frame.size = CGSize(width: self.view.bounds.maxX/3, height: self.view.bounds.maxY/15)
         settingButton.frame.size = CGSize(width: self.view.bounds.maxX/3, height: self.view.bounds.maxY/15)
         recordListButton.frame.size = CGSize(width: self.view.bounds.maxX/3, height: self.view.bounds.maxY/15)
