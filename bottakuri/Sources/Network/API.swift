@@ -129,3 +129,38 @@ public struct GetRisk: locationRequest {
 public struct GetRiskResponse: Decodable {
     let risk: Int
 }
+
+public struct SendAudioFile: locationRequest {
+    public var dataParser: DataParser {
+        return DecodableDataParser()
+    }
+    
+    public typealias Response = LocationPostResponse
+    public var path: String {
+        return "saveAudio"
+    }
+    public var method: HTTPMethod {
+        return .post
+    }
+    public var bodyParameters: BodyParameters? {
+        let param = [
+            try! MultipartFormDataBodyParameters.Part(value: "hoge", name: "token"),
+            try! MultipartFormDataBodyParameters.Part(value: lat, name: "lat"),
+            try! MultipartFormDataBodyParameters.Part(value: lng, name: "lng"),
+            try! MultipartFormDataBodyParameters.Part(fileURL: audioFileUrl, name: "audioFile")
+        ]
+        return MultipartFormDataBodyParameters(parts: param)
+    }
+    
+    let lat: Double
+    let lng: Double
+    let audioFileUrl: URL
+    
+    public func response(from object: Any, urlResponse: HTTPURLResponse) throws -> Response {
+        guard let data = object as? Data else {
+            throw ResponseError.unexpectedObject(object)
+        }
+        let decoder = JSONDecoder()
+        return try decoder.decode(Response.self, from: data)
+    }
+}
