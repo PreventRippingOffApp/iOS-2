@@ -56,7 +56,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
             recordButton.layer.cornerRadius = 20
             recordButton.backgroundColor = UIColor(
                 red:1.0, green: 0.0, blue: 0.0, alpha: 0.7)
-            recordButton.setTitle("🐱", for: .normal)
+            recordButton.setImage(UIImage(systemName: "mic.fill"), for: .normal)
         }
     }
     @IBOutlet weak var settingButton: UIButton! {
@@ -282,6 +282,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     
     @IBAction func record(_ sender: Any) {
         if isRecording {
+            self.recordButton.setImage(UIImage(systemName: "mic.fill"), for: .normal)
             guard let audioRecorder = self.audioRecorder else { fatalError("レコーダが見つかりませんでした") }
             audioRecorder.stop()
             userDefaults.set(self.fileArray, forKey: "fileArray")
@@ -293,6 +294,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
             print("stop")
             isRecording = false
         } else {
+            self.recordButton.setImage(UIImage(systemName: "square.fill"), for: .normal)
             let session = AVAudioSession.sharedInstance()
                        
             do {
