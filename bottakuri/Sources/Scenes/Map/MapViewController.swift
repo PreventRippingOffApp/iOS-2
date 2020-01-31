@@ -346,27 +346,38 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     func sendMail() {
         //メール送信が可能なら
         if MFMailComposeViewController.canSendMail() {
-
+            let placeStr: String = "沖縄県南城市佐敷字新里1688"
+//            if let location = self.userLocation {
+//                let location = CLLocation(latitude: location.latitude, longitude: location.longitude)
+//                CLGeocoder().reverseGeocodeLocation(location) { placemarks, error in
+//                    if let placemark = placemarks?.first {
+//                        let administrativeArea = placemark.administrativeArea ?? ""
+//                        let locality = placemark.locality ?? ""
+//                        let thoroughfare = placemark.thoroughfare ?? ""
+//                        let subThoroughfare = placemark.subThoroughfare ?? ""
+//                        placeStr = administrativeArea + locality + thoroughfare + subThoroughfare
+//                        print(placeStr)
+//                    }
+//                }
+//            }
             let f = DateFormatter()
-            f.timeStyle = .full
-            f.dateStyle = .full
-            f.locale = Locale(identifier: "ja_JP")
-            let now = Date()
-            print(f.string(from: now))
-            
-            guard let location = self.userLocation else { return }
-            //MFMailComposeVCのインスタンス
-            let mail = MFMailComposeViewController()
-            //MFMailComposeのデリゲート
-            mail.mailComposeDelegate = self
-            //送り先
-         mail.setToRecipients(["fpp.mail-110@fukuoka-police.jp"])
+               f.timeStyle = .full
+               f.dateStyle = .full
+               f.locale = Locale(identifier: "ja_JP")
+               let now = Date()
+               print(f.string(from: now))
+               //MFMailComposeVCのインスタンス
+               let mail = MFMailComposeViewController()
+               //MFMailComposeのデリゲート
+               mail.mailComposeDelegate = self
+               //送り先
+            mail.setToRecipients(["syankenpon@gmail.com"])
 
-            mail.setSubject("揉め事です")
-            //メッセージ本"
-            mail.setMessageBody("<p>1.発生場所</p><p>緯度\(location.latitude)</p><p>経度\(location.longitude)</p><p>2.発生時間</p><p>\(f.string(from: now))</p><p>3.被害状況</p><p>揉め事です</p><p>4.あなたの住所・氏名・現在地</p><p>福岡県中央区●●●</p>", isHTML: true)
-            //メールを表示
-            self.present(mail, animated: true, completion: nil)
+               mail.setSubject("揉め事です")
+               //メッセージ本"
+               mail.setMessageBody("<p>1.発生場所</p><p>\(placeStr)</p><p>2.発生時間</p><p>\(f.string(from: now))</p><p>3.被害状況</p><p>揉め事です</p><p>4.あなたの住所・氏名・現在地</p><p>福岡県中央区●●●</p>", isHTML: true)
+               //メールを表示
+               self.present(mail, animated: true, completion: nil)
         //メール送信が不可能なら
         } else {
             //アラートで通知
