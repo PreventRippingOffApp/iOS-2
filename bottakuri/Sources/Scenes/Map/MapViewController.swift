@@ -16,7 +16,7 @@ import MediaPlayer
 import Speech
 import MessageUI
 
-class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, AVAudioRecorderDelegate,MFMailComposeViewControllerDelegate {
+class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, AVAudioRecorderDelegate,MFMailComposeViewControllerDelegate, UNUserNotificationCenterDelegate {
     
     // Map
     @IBOutlet weak var mapView: MKMapView!
@@ -501,6 +501,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
                 break
             }
             controller.dismiss(animated: true, completion: nil)
+        }
+    }
+    
     func sendAudioFile(url: URL) {
         print(url)
         guard let location = self.userLocation else { return }
