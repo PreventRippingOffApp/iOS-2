@@ -289,6 +289,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
             self.recognitionTask?.finish()
             self.audioEngine.stop()
             self.audioEngine.inputNode.removeTap(onBus: 0)
+            print("stop")
             isRecording = false
         } else {
             let session = AVAudioSession.sharedInstance()
@@ -306,7 +307,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
             }
 
             let settings = [
-               AVFormatIDKey: Int(kAudioFormatLinearPCM),
+               AVFormatIDKey: Int(kAudioFormatFLAC),
                AVSampleRateKey: 44100,
                AVNumberOfChannelsKey: 1,
                AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
@@ -320,6 +321,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
             audioRecorder.delegate = self
             audioRecorder.record()
             try! startRecording()
+            print("start")
             isRecording = true
         }
     }
@@ -376,6 +378,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     func setVolumeView() {
         let volumeView = MPVolumeView(frame: CGRect(origin:CGPoint(x:/*-3000*/ 0, y:0), size:CGSize.zero))
         self.view.addSubview(volumeView)
+        print("set volume view")
         NotificationCenter.default.addObserver(self, selector: #selector(HomeViewController.volumeChanged(notification:)), name:
         NSNotification.Name("AVSystemController_SystemVolumeDidChangeNotification"), object: nil)
     }
@@ -409,6 +412,18 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
             if let userInfo = notification.userInfo {
                 if let volumeChangeType = userInfo["AVSystemController_AudioVolumeChangeReasonNotificationParameter"] as? String {
                     if volumeChangeType == "ExplicitVolumeChange" {
+                        guard let audioRecorder = self.audioRecorder else { fatalError("レコーダが見つかりませんでした") }
+                        audioRecorder.stop()
+                        userDefaults.set(self.fileArray, forKey: "fileArray")
+                        userDefaults.set(self.url, forKey: fileArray.last!)
+                        self.recognitionTask?.cancel()
+                        self.recognitionTask?.finish()
+                        self.audioEngine.stop()
+                        self.audioEngine.inputNode.removeTap(onBus: 0)
+                        print("stop")
+                        isRecording = false
+                        
+                        self.sendAudioFile(url: self.url!)
                         let alert = UIAlertController(title: nil, message: "通報しました", preferredStyle: .alert)
                         alert.addAction(UIAlertAction.init(title: "OK", style: .default, handler: { (_) in
                             self.dismiss(animated: true, completion: nil)
@@ -421,13 +436,27 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
         }
     }
     
+    func sendAudioFile(url: URL) {
+        print(url)
+        guard let location = self.userLocation else { return }
+        let req = SendAudioFile(lat: location.latitude, lng: location.longitude, audioFileUrl: url)
+        Session.send(req) { result in
+            switch result {
+                case .success(let res):
+                    print(res)
+                case .failure(let error):
+                    print(error)
+            }
+        }
+    }
+    
     func getURL() -> URL {
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         let docsDirect = paths[0]
         let f = DateFormatter()
         f.dateFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss"
         f.locale = Locale(identifier: "ja_JP")
-        let now = f.string(from: Date())
+        let now = f.string(from: Date()) + ".flac"
         self.url = docsDirect.appendingPathComponent(now)
         guard let url = self.url else { fatalError("urlが取得できませんでした") }
         self.fileArray.append(now)
@@ -437,6 +466,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     
     // MARK: - UI Setting
     func setUI() {
+        setVolumeView()
         recordButton.frame.size = CGSize(width: self.view.bounds.maxX/3, height: self.view.bounds.maxY/15)
         settingButton.frame.size = CGSize(width: self.view.bounds.maxX/3, height: self.view.bounds.maxY/15)
         recordListButton.frame.size = CGSize(width: self.view.bounds.maxX/3, height: self.view.bounds.maxY/15)
